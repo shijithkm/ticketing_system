@@ -26,4 +26,9 @@ class Event extends Model
      * @var bool
      */
     public $incrementing = true;
+
+
+    public function tickets(){
+        return $this->hasMany('App\Ticket');
+    }
 }

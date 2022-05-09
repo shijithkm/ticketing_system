@@ -45236,6 +45236,63 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -45246,7 +45303,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         title: '',
         description: '',
         event_start_date: '',
-        event_end_date: ''
+        event_end_date: '',
+        lineups: [{ "topic": "Java", "Speaker": "Shijith", "Time": "10:00 AM" }],
+        tickets: [{ "ticket_type": "Gold", "capacity": 10, "price": 100 }]
       },
       event_id: '',
       pagination: {},
@@ -45480,6 +45539,46 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
+          _c("table", { staticClass: "table" }, [
+            _vm._m(0),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.event.lineups, function(lineup) {
+                return _c("tr", { key: lineup.id }, [
+                  _c("td", [_vm._v(_vm._s(lineup.ticket_type))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(lineup.capacity))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(lineup.price))]),
+                  _vm._v(" "),
+                  _vm._m(1, true)
+                ])
+              }),
+              0
+            )
+          ]),
+          _vm._v(" "),
+          _c("table", { staticClass: "table" }, [
+            _vm._m(2),
+            _vm._v(" "),
+            _c(
+              "tbody",
+              _vm._l(_vm.event.tickets, function(ticket) {
+                return _c("tr", { key: ticket.id }, [
+                  _c("td", [_vm._v(_vm._s(ticket.ticket_type))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(ticket.capacity))]),
+                  _vm._v(" "),
+                  _c("td", [_vm._v(_vm._s(ticket.price))]),
+                  _vm._v(" "),
+                  _vm._m(3, true)
+                ])
+              }),
+              0
+            )
+          ]),
+          _vm._v(" "),
           _c(
             "button",
             {
@@ -45616,7 +45715,98 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = []
+var staticRenderFns = [
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Topic" }
+          })
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Speaker" }
+          })
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Time" }
+          })
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [
+          _c("button", { staticClass: "btn btn-light btn-block" }, [
+            _vm._v("Add")
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("button", { staticClass: "btn btn-light btn-block" }, [
+        _vm._v("Delete")
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("thead", [
+      _c("tr", [
+        _c("th", { attrs: { scope: "col" } }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Ticket Type" }
+          })
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Capacity" }
+          })
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [
+          _c("input", {
+            staticClass: "form-control",
+            attrs: { type: "text", placeholder: "Price" }
+          })
+        ]),
+        _vm._v(" "),
+        _c("th", { attrs: { scope: "col" } }, [
+          _c("button", { staticClass: "btn btn-light btn-block" }, [
+            _vm._v("Add")
+          ])
+        ])
+      ])
+    ])
+  },
+  function() {
+    var _vm = this
+    var _h = _vm.$createElement
+    var _c = _vm._self._c || _h
+    return _c("td", [
+      _c("button", { staticClass: "btn btn-light btn-block" }, [
+        _vm._v("Delete")
+      ])
+    ])
+  }
+]
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

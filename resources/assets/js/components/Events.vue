@@ -14,6 +14,63 @@
        <div class="form-group">
         <input class="form-control" placeholder="End Date & Time" v-model="event.event_end_date"></input>
       </div>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">
+      <input type="text" class="form-control" placeholder="Topic">
+      </th>
+      <th scope="col">
+      <input type="text" class="form-control" placeholder="Speaker">
+      </th>
+      <th scope="col">
+      <input type="text" class="form-control" placeholder="Time">
+      </th>
+      <th scope="col"><button class="btn btn-light btn-block">Add</button></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="lineup in event.lineups" v-bind:key="lineup.id">
+      <td>{{ lineup.ticket_type}}</td>
+      <td>{{ lineup.capacity}}</td>
+      <td>{{ lineup.price}}</td>
+      <td><button class="btn btn-light btn-block">Delete</button></td>
+    </tr>
+    
+  </tbody>
+</table>
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">
+      <input type="text" class="form-control" placeholder="Ticket Type">
+      </th>
+      <th scope="col">
+      <input type="text" class="form-control" placeholder="Capacity">
+      </th>
+      <th scope="col">
+      <input type="text" class="form-control" placeholder="Price">
+      </th>
+      <th scope="col"><button class="btn btn-light btn-block">Add</button></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr v-for="ticket in event.tickets" v-bind:key="ticket.id">
+      <td>{{ ticket.ticket_type}}</td>
+      <td>{{ ticket.capacity}}</td>
+      <td>{{ ticket.price}}</td>
+      <td><button class="btn btn-light btn-block">Delete</button></td>
+    </tr>
+    
+  </tbody>
+</table>
+
+
+
       <button type="submit" class="btn btn-light btn-block">Save</button>
     </form>
     <button @click="clearForm()" class="btn btn-danger btn-block">Cancel</button>
@@ -48,7 +105,9 @@ export default {
         title: '',
         description: '',
         event_start_date: '',
-        event_end_date: ''
+        event_end_date: '',
+        lineups:[{"topic":"Java","Speaker":"Shijith","Time":"10:00 AM"}],
+        tickets:[{"ticket_type":"Gold","capacity":10,"price":100}]
       },
       event_id: '',
       pagination: {},
