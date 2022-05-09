@@ -32,4 +32,14 @@ Route::put('event', 'EventController@store');
 // Delete event
 Route::delete('event/{id}', 'EventController@destroy');
 
+// List tickets
+Route::get('tickets', 'TicketsController@index');
 
+// Create ticket
+Route::post('ticket', 'TicketsController@store');
+
+// Update ticket
+Route::put('ticket', 'TicketsController@store');
+
+// Delete ticket
+Route::delete('ticket/{id}', 'TicketsController@destroy');

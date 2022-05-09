@@ -21,6 +21,7 @@ class EventController extends Controller
 
         // Return collection of events as a resource
         return EventResource::collection($events);
+        
     }
 
 

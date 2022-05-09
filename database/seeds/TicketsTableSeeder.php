@@ -2,7 +2,7 @@
 
 use Illuminate\Database\Seeder;
 
-class DatabaseSeeder extends Seeder
+class TicketsTableSeeder extends Seeder
 {
     /**
      * Run the database seeds.
@@ -11,10 +11,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call([
-            EventsTableSeeder::class,
-            TicketsTableSeeder::class
-        ]);
-        
+        factory(App\Ticket::class, 30)->create();
     }
 }
