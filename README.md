@@ -67,8 +67,8 @@ event_id/title/body
 
 ### Author
 
-Brad Traversy
-[Traversy Media](http://www.traversymedia.com)
+Shijith Mohanan
+https://www.linkedin.com/in/shijithkm/
 
 ### Version
 
