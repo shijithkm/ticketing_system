@@ -8,6 +8,8 @@ use App\Event;
 use App\Http\Resources\Event as EventResource;
 use App\Ticket;
 use App\Http\Resources\Ticket as TicketResource;
+use App\Lineup;
+use App\Http\Resources\Lineup as LineupResource;
 
 class EventController extends Controller
 {
@@ -44,15 +46,25 @@ class EventController extends Controller
         $res = $event->save();
       
         if($res) {
-            $arry =  $request->input('tickets');
-          
+
+             // Insert Tickets
              foreach ($request->input('tickets') as $k => $v) {
-                $data = new Ticket;
-                $data->event_id = $event->id;
-                $data->ticket_type = $v['ticket_type'];
-                $data->capacity = $v['capacity'];
-                $data->price = $v['price'];
-                $data->save();
+                $ticket = new Ticket;
+                $ticket->event_id = $event->id;
+                $ticket->ticket_type = $v['ticket_type'];
+                $ticket->capacity = $v['capacity'];
+                $ticket->price = $v['price'];
+                $ticket->save();
+             }
+
+             // Insert Lineups
+             foreach ($request->input('lineups') as $k => $v) {
+                $lineup = new Lineup;
+                $lineup->event_id = $event->id;
+                $lineup->topic = $v['topic'];
+                $lineup->speaker = $v['speaker'];
+                $lineup->event_time = $v['event_time'];
+                $lineup->save();
              }
 
         }

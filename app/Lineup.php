@@ -4,14 +4,14 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Event extends Model
+class Lineup extends Model
 {
-    /**
+     /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'events';
+    protected $table = 'lineups';
 
      /**
      * The primary key associated with the table.
@@ -27,12 +27,8 @@ class Event extends Model
      */
     public $incrementing = true;
 
-
-    public function tickets(){
-        return $this->hasMany('App\Ticket');
+    public function event(){
+        $this->belongsTo('App\Event','event_id');
     }
 
-    public function lineups(){
-        return $this->hasMany('App\Lineup');
-    }
 }

@@ -45295,6 +45295,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -45309,7 +45311,10 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         ticket_type: '',
         capacity: '',
         price: '',
-        lineups: [{ "topic": "Java", "Speaker": "Shijith", "Time": "10:00 AM" }],
+        topic: '',
+        speaker: '',
+        event_time: '',
+        lineups: [],
         tickets: []
       },
       event_id: '',
@@ -45419,6 +45424,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       this.event.description = '';
       this.event.event_start_date = '';
       this.event.event_end_date = '';
+      this.event.ticket_type = '';
+      this.event.capacity = '';
+      this.event.price = '';
+      this.event.topic = '';
+      this.event.speaker = '';
+      this.event.event_time = '';
+      this.event.tickets = [];
+      this.event.lineups = [];
     },
     addTicket: function addTicket() {
       this.event.tickets = [].concat(_toConsumableArray(this.event.tickets), [{ 'ticket_type': this.event.ticket_type, 'capacity': this.event.capacity, 'price': this.event.price }]);
@@ -45426,6 +45439,16 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     deleteTicket: function deleteTicket(index) {
       if (confirm('Are You Sure?')) {
         this.event.tickets = this.event.tickets.filter(function (ticket, i) {
+          return index != i;
+        });
+      }
+    },
+    addLineup: function addLineup() {
+      this.event.lineups = [].concat(_toConsumableArray(this.event.lineups), [{ 'topic': this.event.topic, 'speaker': this.event.speaker, 'event_time': this.event.event_time }]);
+    },
+    deleteLineup: function deleteLineup(index) {
+      if (confirm('Are You Sure?')) {
+        this.event.lineups = this.event.lineups.filter(function (lineup, i) {
           return index != i;
         });
       }
@@ -45554,25 +45577,133 @@ var render = function() {
             })
           ]),
           _vm._v(" "),
+          _c("h3", [_vm._v("Lineup Details")]),
+          _vm._v(" "),
           _c("table", { staticClass: "table" }, [
-            _vm._m(0),
+            _c("thead", [
+              _c("tr", [
+                _c("th", { attrs: { scope: "col" } }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.event.topic,
+                        expression: "event.topic"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Topic" },
+                    domProps: { value: _vm.event.topic },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.event, "topic", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("th", { attrs: { scope: "col" } }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.event.speaker,
+                        expression: "event.speaker"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Speaker" },
+                    domProps: { value: _vm.event.speaker },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.event, "speaker", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("th", { attrs: { scope: "col" } }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.event.event_time,
+                        expression: "event.event_time"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Event Time" },
+                    domProps: { value: _vm.event.event_time },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.event, "event_time", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("th", { attrs: { scope: "col" } }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-light btn-block",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.addLineup()
+                        }
+                      }
+                    },
+                    [_vm._v("Add")]
+                  )
+                ])
+              ])
+            ]),
             _vm._v(" "),
             _c(
               "tbody",
               _vm._l(_vm.event.lineups, function(lineup) {
                 return _c("tr", { key: lineup.id }, [
-                  _c("td", [_vm._v(_vm._s(lineup.ticket_type))]),
+                  _c("td", [_vm._v(_vm._s(lineup.topic))]),
                   _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(lineup.capacity))]),
+                  _c("td", [_vm._v(_vm._s(lineup.speaker))]),
                   _vm._v(" "),
-                  _c("td", [_vm._v(_vm._s(lineup.price))]),
+                  _c("td", [_vm._v(_vm._s(lineup.event_time))]),
                   _vm._v(" "),
-                  _vm._m(1, true)
+                  _c("td", [
+                    _c(
+                      "button",
+                      {
+                        staticClass: "btn btn-light btn-block",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteLineup(_vm.index)
+                          }
+                        }
+                      },
+                      [_vm._v("Delete")]
+                    )
+                  ])
                 ])
               }),
               0
             )
           ]),
+          _vm._v(" "),
+          _c("h3", [_vm._v("Ticket Details")]),
           _vm._v(" "),
           _c("table", { staticClass: "table" }, [
             _c("thead", [
@@ -45835,53 +45966,7 @@ var render = function() {
     2
   )
 }
-var staticRenderFns = [
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Topic" }
-          })
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Speaker" }
-          })
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Time" }
-          })
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [
-          _c("button", { staticClass: "btn btn-light btn-block" }, [
-            _vm._v("Add")
-          ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("button", { staticClass: "btn btn-light btn-block" }, [
-        _vm._v("Delete")
-      ])
-    ])
-  }
-]
+var staticRenderFns = []
 render._withStripped = true
 module.exports = { render: render, staticRenderFns: staticRenderFns }
 if (false) {

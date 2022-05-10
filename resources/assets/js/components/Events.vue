@@ -15,33 +15,35 @@
         <input class="form-control" placeholder="End Date & Time" v-model="event.event_end_date"></input>
       </div>
 
+<h3>Lineup Details</h3>
 
 <table class="table">
   <thead>
     <tr>
       <th scope="col">
-      <input type="text" class="form-control" placeholder="Topic">
+      <input type="text" class="form-control" placeholder="Topic"  v-model="event.topic">
       </th>
       <th scope="col">
-      <input type="text" class="form-control" placeholder="Speaker">
+      <input type="text" class="form-control" placeholder="Speaker" v-model="event.speaker">
       </th>
       <th scope="col">
-      <input type="text" class="form-control" placeholder="Time">
+      <input type="text" class="form-control" placeholder="Event Time" v-model="event.event_time">
       </th>
-      <th scope="col"><button class="btn btn-light btn-block">Add</button></th>
+      <th scope="col"><button type="button"  class="btn btn-light btn-block"  @click="addLineup()" >Add</button></th>
     </tr>
   </thead>
   <tbody>
     <tr v-for="lineup in event.lineups" v-bind:key="lineup.id">
-      <td>{{ lineup.ticket_type}}</td>
-      <td>{{ lineup.capacity}}</td>
-      <td>{{ lineup.price}}</td>
-      <td><button class="btn btn-light btn-block">Delete</button></td>
+      <td>{{ lineup.topic}}</td>
+      <td>{{ lineup.speaker}}</td>
+      <td>{{ lineup.event_time}}</td>
+      <td><button type="button"   @click="deleteLineup(index)" class="btn btn-light btn-block">Delete</button></td>
     </tr>
     
   </tbody>
 </table>
 
+<h3>Ticket Details</h3>
 
 <table class="table">
   <thead>
@@ -109,7 +111,10 @@ export default {
         ticket_type:'',
         capacity:'',
         price:'',
-        lineups:[{"topic":"Java","Speaker":"Shijith","Time":"10:00 AM"}],
+        topic:'',
+        speaker:'',
+        event_time:'',
+        lineups:[],
         tickets:[],
       },
       event_id: '',
@@ -209,6 +214,14 @@ export default {
       this.event.description = '';
       this.event.event_start_date = '';
       this.event.event_end_date = '';
+      this.event.ticket_type = '';
+      this.event.capacity = '';
+      this.event.price = '';
+      this.event.topic = '';
+      this.event.speaker = '';
+      this.event.event_time = '';
+      this.event.tickets = [];
+      this.event.lineups = [];
     },
     addTicket(){
      this.event.tickets = [...this.event.tickets,{'ticket_type':this.event.ticket_type,'capacity':this.event.capacity,'price':this.event.price}];
@@ -216,6 +229,14 @@ export default {
     deleteTicket(index){
        if (confirm('Are You Sure?')) {
          this.event.tickets = this.event.tickets.filter((ticket,i)=>(index != i));
+       }
+    },
+    addLineup(){
+     this.event.lineups = [...this.event.lineups,{'topic':this.event.topic,'speaker':this.event.speaker,'event_time':this.event.event_time}];
+    },
+    deleteLineup(index){
+       if (confirm('Are You Sure?')) {
+         this.event.lineups = this.event.lineups.filter((lineup,i)=>(index != i));
        }
     }
 
