@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\Event;
 use App\Http\Resources\Event as EventResource;
+use App\Ticket;
+use App\Http\Resources\Ticket as TicketResource;
 
 class EventController extends Controller
 {
@@ -39,10 +41,23 @@ class EventController extends Controller
         $event->description = $request->input('description');
         $event->event_start_date = $request->input('event_start_date');
         $event->event_end_date = $request->input('event_end_date');
+        $res = $event->save();
+      
+        if($res) {
+            $arry =  $request->input('tickets');
+          
+             foreach ($request->input('tickets') as $k => $v) {
+                $data = new Ticket;
+                $data->event_id = $event->id;
+                $data->ticket_type = $v['ticket_type'];
+                $data->capacity = $v['capacity'];
+                $data->price = $v['price'];
+                $data->save();
+             }
 
-        if($event->save()) {
-            return new EventResource($event);
         }
+
+        return new EventResource($event);
         
     }
 

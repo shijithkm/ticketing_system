@@ -18,15 +18,16 @@ class Ticket extends Resource
 
         return [
             'id' => $this->id,
+            'event_id' => $this->event_id,
             'ticket_type' => $this->ticket_type,
             'capacity' => $this->capacity,
             'price' => $this->price,
         ];
     }
 
-    public function with($request) {
-        return [
-            'version' => '1.0.0',
-        ];
-    }
+    // public function with($request) {
+    //     return [
+    //         'version' => '1.0.0',
+    //     ];
+    // }
 }

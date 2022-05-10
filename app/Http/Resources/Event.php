@@ -25,9 +25,9 @@ class Event extends Resource
         ];
     }
 
-    public function with($request) {
-        return [
-            'version' => '1.0.0',
-        ];
-    }
+    // public function with($request) {
+    //     return [
+    //         'version' => '1.0.0',
+    //     ];
+    // }
 }

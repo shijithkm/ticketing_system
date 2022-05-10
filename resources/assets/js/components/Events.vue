@@ -47,23 +47,23 @@
   <thead>
     <tr>
       <th scope="col">
-      <input type="text" class="form-control" placeholder="Ticket Type">
+      <input type="text" class="form-control"  v-model="event.ticket_type" placeholder="Ticket Type">
       </th>
       <th scope="col">
-      <input type="text" class="form-control" placeholder="Capacity">
+      <input type="text" class="form-control" placeholder="Capacity" v-model="event.capacity">
       </th>
       <th scope="col">
-      <input type="text" class="form-control" placeholder="Price">
+      <input type="text" class="form-control" placeholder="Price"  v-model="event.price">
       </th>
-      <th scope="col"><button class="btn btn-light btn-block">Add</button></th>
+      <th scope="col"><button type="button" @click="addTicket()" class="btn btn-light btn-block">Add</button></th>
     </tr>
   </thead>
   <tbody>
-    <tr v-for="ticket in event.tickets" v-bind:key="ticket.id">
+    <tr v-for="(ticket,index) in event.tickets" v-bind:key="ticket.id">
       <td>{{ ticket.ticket_type}}</td>
       <td>{{ ticket.capacity}}</td>
       <td>{{ ticket.price}}</td>
-      <td><button class="btn btn-light btn-block">Delete</button></td>
+      <td><button type="button" @click="deleteTicket(index)" v-bind:key="ticket.id" class="btn btn-light btn-block">Delete</button></td>
     </tr>
     
   </tbody>
@@ -106,8 +106,11 @@ export default {
         description: '',
         event_start_date: '',
         event_end_date: '',
+        ticket_type:'',
+        capacity:'',
+        price:'',
         lineups:[{"topic":"Java","Speaker":"Shijith","Time":"10:00 AM"}],
-        tickets:[{"ticket_type":"Gold","capacity":10,"price":100}]
+        tickets:[],
       },
       event_id: '',
       pagination: {},
@@ -206,7 +209,16 @@ export default {
       this.event.description = '';
       this.event.event_start_date = '';
       this.event.event_end_date = '';
+    },
+    addTicket(){
+     this.event.tickets = [...this.event.tickets,{'ticket_type':this.event.ticket_type,'capacity':this.event.capacity,'price':this.event.price}];
+    },
+    deleteTicket(index){
+       if (confirm('Are You Sure?')) {
+         this.event.tickets = this.event.tickets.filter((ticket,i)=>(index != i));
+       }
     }
+
   }
 };
 </script>

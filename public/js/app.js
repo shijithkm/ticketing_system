@@ -45196,6 +45196,8 @@ module.exports = Component.exports
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
+
 //
 //
 //
@@ -45304,8 +45306,11 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         description: '',
         event_start_date: '',
         event_end_date: '',
+        ticket_type: '',
+        capacity: '',
+        price: '',
         lineups: [{ "topic": "Java", "Speaker": "Shijith", "Time": "10:00 AM" }],
-        tickets: [{ "ticket_type": "Gold", "capacity": 10, "price": 100 }]
+        tickets: []
       },
       event_id: '',
       pagination: {},
@@ -45414,6 +45419,16 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.event.description = '';
       this.event.event_start_date = '';
       this.event.event_end_date = '';
+    },
+    addTicket: function addTicket() {
+      this.event.tickets = [].concat(_toConsumableArray(this.event.tickets), [{ 'ticket_type': this.event.ticket_type, 'capacity': this.event.capacity, 'price': this.event.price }]);
+    },
+    deleteTicket: function deleteTicket(index) {
+      if (confirm('Are You Sure?')) {
+        this.event.tickets = this.event.tickets.filter(function (ticket, i) {
+          return index != i;
+        });
+      }
     }
   }
 });
@@ -45560,11 +45575,101 @@ var render = function() {
           ]),
           _vm._v(" "),
           _c("table", { staticClass: "table" }, [
-            _vm._m(2),
+            _c("thead", [
+              _c("tr", [
+                _c("th", { attrs: { scope: "col" } }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.event.ticket_type,
+                        expression: "event.ticket_type"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Ticket Type" },
+                    domProps: { value: _vm.event.ticket_type },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.event, "ticket_type", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("th", { attrs: { scope: "col" } }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.event.capacity,
+                        expression: "event.capacity"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Capacity" },
+                    domProps: { value: _vm.event.capacity },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.event, "capacity", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("th", { attrs: { scope: "col" } }, [
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.event.price,
+                        expression: "event.price"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: { type: "text", placeholder: "Price" },
+                    domProps: { value: _vm.event.price },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.$set(_vm.event, "price", $event.target.value)
+                      }
+                    }
+                  })
+                ]),
+                _vm._v(" "),
+                _c("th", { attrs: { scope: "col" } }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-light btn-block",
+                      attrs: { type: "button" },
+                      on: {
+                        click: function($event) {
+                          return _vm.addTicket()
+                        }
+                      }
+                    },
+                    [_vm._v("Add")]
+                  )
+                ])
+              ])
+            ]),
             _vm._v(" "),
             _c(
               "tbody",
-              _vm._l(_vm.event.tickets, function(ticket) {
+              _vm._l(_vm.event.tickets, function(ticket, index) {
                 return _c("tr", { key: ticket.id }, [
                   _c("td", [_vm._v(_vm._s(ticket.ticket_type))]),
                   _vm._v(" "),
@@ -45572,7 +45677,22 @@ var render = function() {
                   _vm._v(" "),
                   _c("td", [_vm._v(_vm._s(ticket.price))]),
                   _vm._v(" "),
-                  _vm._m(3, true)
+                  _c("td", [
+                    _c(
+                      "button",
+                      {
+                        key: ticket.id,
+                        staticClass: "btn btn-light btn-block",
+                        attrs: { type: "button" },
+                        on: {
+                          click: function($event) {
+                            return _vm.deleteTicket(index)
+                          }
+                        }
+                      },
+                      [_vm._v("Delete")]
+                    )
+                  ])
                 ])
               }),
               0
@@ -45740,51 +45860,6 @@ var staticRenderFns = [
           _c("input", {
             staticClass: "form-control",
             attrs: { type: "text", placeholder: "Time" }
-          })
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [
-          _c("button", { staticClass: "btn btn-light btn-block" }, [
-            _vm._v("Add")
-          ])
-        ])
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("td", [
-      _c("button", { staticClass: "btn btn-light btn-block" }, [
-        _vm._v("Delete")
-      ])
-    ])
-  },
-  function() {
-    var _vm = this
-    var _h = _vm.$createElement
-    var _c = _vm._self._c || _h
-    return _c("thead", [
-      _c("tr", [
-        _c("th", { attrs: { scope: "col" } }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Ticket Type" }
-          })
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Capacity" }
-          })
-        ]),
-        _vm._v(" "),
-        _c("th", { attrs: { scope: "col" } }, [
-          _c("input", {
-            staticClass: "form-control",
-            attrs: { type: "text", placeholder: "Price" }
           })
         ]),
         _vm._v(" "),

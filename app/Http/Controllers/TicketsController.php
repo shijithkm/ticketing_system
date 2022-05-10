@@ -39,11 +39,12 @@ class TicketsController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(Request $request) 
     {
         $ticket = $request->isMethod('put') ? Ticket::findOrFail($request->ticket_id) : new Ticket;
 
         $ticket->id = $request->input('ticket_id');
+        $ticket->event_id = $request->input('event_id');
         $ticket->ticket_type = $request->input('ticket_type');
         $ticket->capacity = $request->input('capacity');
         $ticket->price = $request->input('price');
