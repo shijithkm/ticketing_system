@@ -4,14 +4,15 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class Ticket extends Model
+class EventRegistration extends Model
 {
-     /**
+
+    /**
      * The table associated with the model.
      *
      * @var string
      */
-    protected $table = 'tickets';
+    protected $table = 'event_registrations';
 
      /**
      * The primary key associated with the table.
@@ -27,12 +28,7 @@ class Ticket extends Model
      */
     public $incrementing = true;
 
-    public function event(){
-        $this->belongsTo('App\Event','event_id');
+    public function ticket(){
+        $this->belongsTo('App\Ticket','ticket_id');
     }
-
-    public function registration(){
-        $this->belongsTo('App\EventRegistration','ticket_id');
-    }
-
 }

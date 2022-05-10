@@ -45467,7 +45467,7 @@ var render = function() {
   return _c(
     "div",
     [
-      _c("h2", [_vm._v("Events")]),
+      _c("h2", [_vm._v("Event Creation")]),
       _vm._v(" "),
       _c(
         "form",

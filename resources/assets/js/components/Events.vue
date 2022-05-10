@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h2>Events</h2>
+    <h2>Event Creation</h2>
     <form @submit.prevent="addEvent" class="mb-3">
       <div class="form-group">
         <input type="text" class="form-control" placeholder="Title" v-model="event.title">
