@@ -16,6 +16,7 @@ window.Vue = require("vue");
 
 Vue.component("navbar", require("./components/Navbar.vue"));
 Vue.component("events", require("./components/Events.vue"));
+Vue.component("registration", require("./components/Registration.vue"));
 
 const app = new Vue({
   el: "#app",

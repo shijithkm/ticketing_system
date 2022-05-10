@@ -21,7 +21,7 @@ class EventController extends Controller
     public function index()
     {
         // Get events
-        $events = Event::orderBy('created_at', 'desc')->paginate(5);
+        $events = Event::orderBy('created_at', 'desc')->get();
 
         // Return collection of events as a resource
         return EventResource::collection($events);
@@ -87,6 +87,21 @@ class EventController extends Controller
         // Return single event as a resource
         return new EventResource($event);
     }
+
+      /**
+     * Display the specified resource.
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
+     */
+    public function tickets($id)
+    {
+        // Get Tickets
+        $tickets = Event::find($id)->tickets;
+        return $tickets;
+    }
+
+  
 
     /**
      * Remove the specified resource from storage.

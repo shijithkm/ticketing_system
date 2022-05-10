@@ -23,6 +23,9 @@ Route::get('events', 'EventController@index');
 // List single event
 Route::get('event/{id}', 'EventController@show');
 
+// List Tikets Based On Event id
+Route::get('event/{id}/tickets', 'EventController@tickets');
+
 // Create new event
 Route::post('event', 'EventController@store');
 
