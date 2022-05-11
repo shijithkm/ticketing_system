@@ -53,6 +53,9 @@ Route::group(['middleware'=>'jwt.verify'],function(){
 
     // Event Registration
     Route::post('register', 'EventRegistrationController@store');
+
+    // Sales Report
+    Route::get('sales', 'EventController@sales');
 });
 
 
