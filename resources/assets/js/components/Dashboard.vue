@@ -19,7 +19,7 @@
       </thead>
       <tbody>
         <tr v-for="sale in sales">
-          <td>{{ sale.title }}/td></td>
+          <td>{{ sale.title }}</td>
           <td>{{ sale.ticket_type }}</td>
           <td class="text-right">{{ sale.price }}</td>
           <td class="text-right">{{ sale.sold }}</td>

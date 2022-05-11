@@ -67,7 +67,7 @@ export default {
     },
     fetchEvents(page_url) {
       let vm = this;
-      page_url = page_url || '/api/events';
+      page_url = page_url || '/api/events/all';
       fetch(page_url,{
         headers: {
             'content-type': 'application/json',

@@ -22,12 +22,20 @@ class EventController extends Controller
     public function index()
     {
         // Get events
-        $events = Event::orderBy('created_at', 'desc')->get();
+        $events = Event::orderBy('created_at', 'desc')->paginate(5);
 
         // Return collection of events as a resource
         return EventResource::collection($events);
     }
 
+    public function allevents()
+    {
+        // Get events
+        $events = Event::orderBy('title', 'asc')->get();
+
+        // Return collection of events as a resource
+        return EventResource::collection($events);
+    }
 
     /**
      * Store a newly created resource in storage.

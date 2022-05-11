@@ -20,6 +20,8 @@ Route::group(['middleware'=>'jwt.verify'],function(){
     Route::get('user','AuthController@getUser');
     // List events
     Route::get('events', 'EventController@index');
+    
+    Route::get('events/all', 'EventController@allevents');
 
     // List single event
     Route::get('event/{id}', 'EventController@show');

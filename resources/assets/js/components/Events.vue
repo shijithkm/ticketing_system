@@ -1,7 +1,14 @@
 <template>
   <div>
-    <h2>Event Creation</h2>
-    <form @submit.prevent="addEvent" class="mb-3">
+  
+
+
+<div class="container">
+
+  <div class="row">
+    <div class="col-8">
+      <h3>Add Event</h3>
+      <form @submit.prevent="addEvent" class="mb-3">
       <div class="form-group">
         <input type="text" class="form-control" placeholder="Title" v-model="event.title">
       </div>
@@ -9,10 +16,10 @@
         <textarea class="form-control" placeholder="Description" v-model="event.description"></textarea>
       </div>
        <div class="form-group">
-        <input class="form-control" placeholder="Start Date & Time" v-model="event.event_start_date"></input>
+        <input class="form-control"  type="datetime-local" placeholder="Start Date & Time" v-model="event.event_start_date"></input>
       </div>
        <div class="form-group">
-        <input class="form-control" placeholder="End Date & Time" v-model="event.event_end_date"></input>
+        <input class="form-control"  type="datetime-local" placeholder="End Date & Time" v-model="event.event_end_date"></input>
       </div>
 
 <h3>Lineup Details</h3>
@@ -27,9 +34,9 @@
       <input type="text" class="form-control" placeholder="Speaker" v-model="event.speaker">
       </th>
       <th scope="col">
-      <input type="text" class="form-control" placeholder="Event Time" v-model="event.event_time">
+      <input type="datetime-local" class="form-control" placeholder="Event Time" v-model="event.event_time">
       </th>
-      <th scope="col"><button type="button"  class="btn btn-light btn-block"  @click="addLineup()" >Add</button></th>
+      <th scope="col"><button type="button"  class="btn btn-light btn-block"  :disabled="(!event.topic || !event.speaker || !event.event_time)?true:false" @click="addLineup()" >Add</button></th>
     </tr>
   </thead>
   <tbody>
@@ -49,15 +56,21 @@
   <thead>
     <tr>
       <th scope="col">
-      <input type="text" class="form-control"  v-model="event.ticket_type" placeholder="Ticket Type">
+
+      <label for="exampleFormControlSelect1">Ticket Type</label>
+      <select class="form-control" v-model="event.ticket_type">
+        <option value="GOLD">GOLD</option>
+        <option value="SILVER">SILVER</option>
+        <option value="PLATTINUM">PLATINUM</option>
+      </select>
       </th>
       <th scope="col">
-      <input type="text" class="form-control" placeholder="Capacity" v-model="event.capacity">
+      <input type="number" class="form-control" placeholder="Capacity" v-model="event.capacity">
       </th>
       <th scope="col">
-      <input type="text" class="form-control" placeholder="Price"  v-model="event.price">
+      <input type="number" class="form-control" placeholder="Price"  v-model="event.price">
       </th>
-      <th scope="col"><button type="button" @click="addTicket()" class="btn btn-light btn-block">Add</button></th>
+      <th scope="col"><button type="button"  :disabled="(!event.ticket_type || !event.capacity || !event.price)?true:false" @click="addTicket()" class="btn btn-light btn-block">Add</button></th>
     </tr>
   </thead>
   <tbody>
@@ -65,17 +78,21 @@
       <td>{{ ticket.ticket_type}}</td>
       <td>{{ ticket.capacity}}</td>
       <td>{{ ticket.price}}</td>
-      <td><button type="button" @click="deleteTicket(index)" v-bind:key="ticket.id" class="btn btn-light btn-block">Delete</button></td>
+      <td><button type="button"  @click="deleteTicket(index)" v-bind:key="ticket.id" class="btn btn-light btn-block">Delete</button></td>
     </tr>
     
   </tbody>
 </table>
 
-
-
-      <button type="submit" class="btn btn-light btn-block">Save</button>
+  
+      <button type="submit" :disabled="!event.title?true:false"  class="btn btn-light btn-block">Create Event</button>
     </form>
     <button @click="clearForm()" class="btn btn-danger btn-block">Cancel</button>
+
+    </div>
+    <div class="col" >
+      <h3>Event List</h3>
+
     <nav aria-label="Page navigation example">
       <ul class="pagination">
         <li v-bind:class="[{disabled: !pagination.prev_page_url}]" class="page-item"><a class="page-link" href="#" @click="fetchEvents(pagination.prev_page_url)">Previous</a></li>
@@ -86,13 +103,24 @@
       </ul>
     </nav>
     <div class="card card-body mb-2" v-for="event in events" v-bind:key="event.id">
-      <h3>{{ event.title }}</h3>
+  
+      <div class="col-12 text-left">
+          <h4>{{ event.title }}</h4>
       <p>{{ event.description }}</p>
-      <p>{{ event.event_start_date }}</p>
-      <p>{{ event.event_end_date }}</p>
-      <hr>
-      <button @click="deleteEvent(event.id)" class="btn btn-danger">Delete</button>
+      <button @click="deleteEvent(event.id)" type="button" class="btn btn-danger">Delete</button>
+      </div>
     </div>
+    </div>
+  </div>
+
+</div>
+
+
+  
+
+    <hr/>
+
+   
   </div>
 </template>
 
@@ -138,6 +166,10 @@ export default {
         })
         .then(res => res.json())
         .then(res => {
+          if(res.status === 'Token is Expired'){
+            alert("Token Expired Login Again!")
+            this.$router.push("/logout")
+          }
           this.events = res.data;
           vm.makePagination(res.meta, res.links);
         })
@@ -223,7 +255,11 @@ export default {
        }
     },
     addLineup(){
-     this.event.lineups = [...this.event.lineups,{'topic':this.event.topic,'speaker':this.event.speaker,'event_time':this.event.event_time}];
+      if(this.event.topic && this.event.speaker && this.event.event_time){
+        this.event.lineups = [...this.event.lineups,{'topic':this.event.topic,'speaker':this.event.speaker,'event_time':this.event.event_time}];
+      }else{
+        alert("Please fill topic,speaker and event time before add")
+      }
     },
     deleteLineup(index){
        if (confirm('Are You Sure?')) {
