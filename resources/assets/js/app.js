@@ -8,7 +8,19 @@ require("./bootstrap");
 
 window.Vue = require("vue");
 
+import Vue from "vue";
+import axios from "axios";
+import VueAxios from "vue-axios";
+import VueRouter from "vue-router";
+import store from "./store";
 import router from "./router";
+
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = "http://127.0.0.1:8000/api/";
+const token = localStorage.getItem("token");
+if (token) {
+  axios.defaults.headers.common["Authorization"] = token;
+}
 
 /**
  * Next, we will create a fresh Vue application instance and attach it to
@@ -16,12 +28,29 @@ import router from "./router";
  * or customize the JavaScript scaffolding to fit your unique needs.
  */
 
-Vue.component("navbar", require("./components/Navbar.vue"));
-Vue.component("events", require("./components/Events.vue"));
-Vue.component("registration", require("./components/Registration.vue"));
+Vue.component("dashboard", require("./components/Dashboard.vue").default);
 Vue.component("mainapp", require("./components/MainApp.vue"));
 
+// manage error and expire token
+
+axios.interceptors.response.use(undefined, function(error) {
+  if (error) {
+    const originalRequest = error.config;
+    if (error.response.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
+      store.dispatch("logout");
+      return router.push("/login");
+    } else {
+      store.commit("handle_error", JSON.parse(error.response.data.error));
+    }
+  }
+});
+
+Vue.use(VueAxios, axios);
+Vue.use(VueRouter);
+
 const app = new Vue({
+  store,
   el: "#app",
   router,
 });

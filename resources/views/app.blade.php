@@ -16,8 +16,7 @@
     <body>
         <div id="app">
             <div class="container">
-                  <navbar></navbar>
-                  <router-view></router-view>
+            <mainapp/>
             </div>
         </div>
 
