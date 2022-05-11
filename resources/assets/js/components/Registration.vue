@@ -30,7 +30,7 @@
       </div>
       
 
-      <button type="submit" class="btn btn-light btn-block">Save</button>
+      <button type="submit" :disabled="(!register.name || !register.email ||  !register.mobile || !register.ticket_id || !register.event_id)?true:false"  class="btn btn-light btn-block">Save</button>
     </form>
     <button @click="clearForm()" class="btn btn-danger btn-block">Cancel</button>
   </div>
@@ -123,7 +123,7 @@ export default {
           .then(res => res.json())
           .then(data => {
             this.tickets = data;
-          })
+            })
           .catch(err => console.log(err));
       
           },

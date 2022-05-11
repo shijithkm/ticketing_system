@@ -50372,6 +50372,9 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         return res.json();
       }).then(function (data) {
         _this3.tickets = data;
+        if (_this3.tickets.data.length <= 0) {
+          alert('No Tickets Found!');
+        }
       }).catch(function (err) {
         return console.log(err);
       });
@@ -50583,7 +50586,20 @@ var render = function() {
         _vm._v(" "),
         _c(
           "button",
-          { staticClass: "btn btn-light btn-block", attrs: { type: "submit" } },
+          {
+            staticClass: "btn btn-light btn-block",
+            attrs: {
+              type: "submit",
+              disabled:
+                !_vm.register.name ||
+                !_vm.register.email ||
+                !_vm.register.mobile ||
+                !_vm.register.ticket_id ||
+                !_vm.register.event_id
+                  ? true
+                  : false
+            }
+          },
           [_vm._v("Save")]
         )
       ]
