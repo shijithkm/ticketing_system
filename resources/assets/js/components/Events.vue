@@ -91,7 +91,6 @@
       <p>{{ event.event_start_date }}</p>
       <p>{{ event.event_end_date }}</p>
       <hr>
-      <button @click="editEvent(event)" class="btn btn-warning mb-2">Edit</button>
       <button @click="deleteEvent(event.id)" class="btn btn-danger">Delete</button>
     </div>
   </div>
@@ -131,7 +130,12 @@ export default {
     fetchEvents(page_url) {
       let vm = this;
       page_url = page_url || '/api/events';
-      fetch(page_url)
+      fetch(page_url, {
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': localStorage.getItem("token") 
+          }
+        })
         .then(res => res.json())
         .then(res => {
           this.events = res.data;
@@ -152,7 +156,11 @@ export default {
     deleteEvent(id) {
       if (confirm('Are You Sure?')) {
         fetch(`api/event/${id}`, {
-          method: 'delete'
+          method: 'delete',
+           headers: {
+            'content-type': 'application/json',
+            'Authorization': localStorage.getItem("token") 
+          }
         })
           .then(res => res.json())
           .then(data => {
@@ -163,13 +171,12 @@ export default {
       }
     },
     addEvent() {
-      if (this.edit === false) {
-        // Add
         fetch('api/event', {
           method: 'post',
           body: JSON.stringify(this.event),
           headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
+            'Authorization': localStorage.getItem("token") 
           }
         })
           .then(res => res.json())
@@ -179,23 +186,7 @@ export default {
             this.fetchEvents();
           })
           .catch(err => console.log(err));
-      } else {
-        // Update
-        fetch('api/event', {
-          method: 'put',
-          body: JSON.stringify(this.event),
-          headers: {
-            'content-type': 'application/json'
-          }
-        })
-          .then(res => res.json())
-          .then(data => {
-            this.clearForm();
-            alert('Event Updated');
-            this.fetchEvents();
-          })
-          .catch(err => console.log(err));
-      }
+      
     },
     editEvent(event) {
       this.edit = true;

@@ -52,7 +52,7 @@ Route::group(['middleware'=>'jwt.verify'],function(){
     Route::get('registrations', 'EventRegistrationController@index');
 
     // Event Registration
-    Route::post('', 'EventRegistrationController@store');
+    Route::post('register', 'EventRegistrationController@store');
 });
 
 

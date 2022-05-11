@@ -22,6 +22,9 @@ export default new Vuex.Store({
     set_user(state, user) {
       state.user = user;
     },
+    set_events(state, events) {
+      state.events = events;
+    },
     handle_error(state, error) {
       state.error = error;
     },
@@ -83,6 +86,14 @@ export default new Vuex.Store({
       return new Promise((resolve, reject) => {
         axios({ url: "user", method: "GET" }).then((res) => {
           commit("set_user", res.data);
+          resolve(res);
+        });
+      });
+    },
+    getEvents({ commit }) {
+      return new Promise((resolve, reject) => {
+        axios({ url: "events", method: "GET" }).then((res) => {
+          commit("set_events", res.data);
           resolve(res);
         });
       });

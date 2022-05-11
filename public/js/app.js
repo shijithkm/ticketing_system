@@ -49129,6 +49129,9 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
     set_user: function set_user(state, user) {
       state.user = user;
     },
+    set_events: function set_events(state, events) {
+      state.events = events;
+    },
     handle_error: function handle_error(state, error) {
       state.error = error;
     },
@@ -49193,6 +49196,16 @@ __WEBPACK_IMPORTED_MODULE_0_vue___default.a.use(__WEBPACK_IMPORTED_MODULE_1_vuex
       return new Promise(function (resolve, reject) {
         __WEBPACK_IMPORTED_MODULE_2_axios___default()({ url: "user", method: "GET" }).then(function (res) {
           commit("set_user", res.data);
+          resolve(res);
+        });
+      });
+    },
+    getEvents: function getEvents(_ref5) {
+      var commit = _ref5.commit;
+
+      return new Promise(function (resolve, reject) {
+        __WEBPACK_IMPORTED_MODULE_2_axios___default()({ url: "events", method: "GET" }).then(function (res) {
+          commit("set_events", res.data);
           resolve(res);
         });
       });
@@ -49404,7 +49417,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -49441,7 +49453,12 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       var vm = this;
       page_url = page_url || '/api/events';
-      fetch(page_url).then(function (res) {
+      fetch(page_url, {
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': localStorage.getItem("token")
+        }
+      }).then(function (res) {
         return res.json();
       }).then(function (res) {
         _this.events = res.data;
@@ -49465,7 +49482,11 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 
       if (confirm('Are You Sure?')) {
         fetch('api/event/' + id, {
-          method: 'delete'
+          method: 'delete',
+          headers: {
+            'content-type': 'application/json',
+            'Authorization': localStorage.getItem("token")
+          }
         }).then(function (res) {
           return res.json();
         }).then(function (data) {
@@ -49479,41 +49500,22 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     addEvent: function addEvent() {
       var _this3 = this;
 
-      if (this.edit === false) {
-        // Add
-        fetch('api/event', {
-          method: 'post',
-          body: JSON.stringify(this.event),
-          headers: {
-            'content-type': 'application/json'
-          }
-        }).then(function (res) {
-          return res.json();
-        }).then(function (data) {
-          _this3.clearForm();
-          alert('Event Added');
-          _this3.fetchEvents();
-        }).catch(function (err) {
-          return console.log(err);
-        });
-      } else {
-        // Update
-        fetch('api/event', {
-          method: 'put',
-          body: JSON.stringify(this.event),
-          headers: {
-            'content-type': 'application/json'
-          }
-        }).then(function (res) {
-          return res.json();
-        }).then(function (data) {
-          _this3.clearForm();
-          alert('Event Updated');
-          _this3.fetchEvents();
-        }).catch(function (err) {
-          return console.log(err);
-        });
-      }
+      fetch('api/event', {
+        method: 'post',
+        body: JSON.stringify(this.event),
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': localStorage.getItem("token")
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (data) {
+        _this3.clearForm();
+        alert('Event Added');
+        _this3.fetchEvents();
+      }).catch(function (err) {
+        return console.log(err);
+      });
     },
     editEvent: function editEvent(event) {
       this.edit = true;
@@ -50045,19 +50047,6 @@ var render = function() {
             _c(
               "button",
               {
-                staticClass: "btn btn-warning mb-2",
-                on: {
-                  click: function($event) {
-                    return _vm.editEvent(event)
-                  }
-                }
-              },
-              [_vm._v("Edit")]
-            ),
-            _vm._v(" "),
-            _c(
-              "button",
-              {
                 staticClass: "btn btn-danger",
                 on: {
                   click: function($event) {
@@ -50090,16 +50079,6 @@ if (false) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 //
 //
 //
@@ -50171,7 +50150,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       var vm = this;
       page_url = page_url || '/api/events';
-      fetch(page_url).then(function (res) {
+      fetch(page_url, {
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': localStorage.getItem("token")
+        }
+      }).then(function (res) {
         return res.json();
       }).then(function (res) {
         _this.events = res.data;
@@ -50184,11 +50168,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       console.log(this.register);
 
-      fetch('api/registration', {
+      fetch('api/register', {
         method: 'post',
         body: JSON.stringify(this.register),
         headers: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
+          'Authorization': localStorage.getItem("token")
         }
       }).then(function (res) {
         return res.json();
@@ -50217,7 +50202,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       fetch('/api/event/' + this.register.event_id + '/tickets', {
         method: 'get',
         headers: {
-          'content-type': 'application/json'
+          'content-type': 'application/json',
+          'Authorization': localStorage.getItem("token")
         }
       }).then(function (res) {
         return res.json();
@@ -50303,40 +50289,57 @@ var render = function() {
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
+          _c("label", { attrs: { for: "exampleFormControlSelect1" } }, [
+            _vm._v("Select Ticket Type")
+          ]),
+          _vm._v(" "),
           _c(
-            "div",
-            { staticClass: "row" },
-            _vm._l(_vm.tickets, function(ticket) {
-              return _c("div", { staticClass: "col-sm-6" }, [
-                _c("div", { staticClass: "card" }, [
-                  _c("div", { staticClass: "card-body" }, [
-                    _c("h5", { staticClass: "card-title" }, [
-                      _vm._v(_vm._s(ticket.ticket_type))
-                    ]),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "card-text" }, [
-                      _vm._v("Capacity " + _vm._s(ticket.capacity))
-                    ]),
-                    _vm._v(" "),
-                    _c("p", { staticClass: "card-text" }, [
-                      _vm._v("Price " + _vm._s(ticket.price) + " AED")
-                    ]),
-                    _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-primary",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.selectTicket(ticket.id)
-                          }
-                        }
-                      },
-                      [_vm._v("Select")]
+            "select",
+            {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.register.ticket_id,
+                  expression: "register.ticket_id"
+                }
+              ],
+              staticClass: "form-control",
+              on: {
+                change: [
+                  function($event) {
+                    var $$selectedVal = Array.prototype.filter
+                      .call($event.target.options, function(o) {
+                        return o.selected
+                      })
+                      .map(function(o) {
+                        var val = "_value" in o ? o._value : o.value
+                        return val
+                      })
+                    _vm.$set(
+                      _vm.register,
+                      "ticket_id",
+                      $event.target.multiple ? $$selectedVal : $$selectedVal[0]
                     )
-                  ])
-                ])
+                  },
+                  function($event) {
+                    return _vm.selectEvent()
+                  }
+                ]
+              }
+            },
+            _vm._l(_vm.tickets, function(ticket) {
+              return _c("option", { domProps: { value: ticket.id } }, [
+                _vm._v(
+                  _vm._s(
+                    "TYPE: " +
+                      ticket.ticket_type +
+                      "  |   CAPACITY: " +
+                      ticket.capacity +
+                      "  |  PRICE:AED " +
+                      ticket.price
+                  )
+                )
               ])
             }),
             0

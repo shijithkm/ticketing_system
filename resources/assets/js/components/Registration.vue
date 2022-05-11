@@ -3,31 +3,21 @@
     <h2>Registrer Event</h2>
     <form @submit.prevent="registerEvent" class="mb-3">
 
-     <div class="form-group">
+  <div class="form-group">
     <label for="exampleFormControlSelect1">Select Event</label>
     <select class="form-control"  @change="selectEvent()" v-model="register.event_id">
       <option v-for="event in events" :value="event.id" >{{ event.title }}</option>
     </select>
   </div>
   
-  
-     <div class="form-group">
 
-     <div class="row">
-  <div class="col-sm-6" v-for="ticket in tickets">
-    <div class="card">
-      <div class="card-body">
-        <h5 class="card-title">{{ ticket.ticket_type }}</h5>
-        <p class="card-text">Capacity {{ ticket.capacity }}</p>
-        <p class="card-text">Price {{ ticket.price }} AED</p>
-        <button type="button" @click="selectTicket(ticket.id)" class="btn btn-primary">Select</button>
-      </div>
-    </div>
+  <div class="form-group">
+    <label for="exampleFormControlSelect1">Select Ticket Type</label>
+    <select class="form-control"  @change="selectEvent()" v-model="register.ticket_id">
+      <option v-for="ticket in tickets" :value="ticket.id" >{{ "TYPE: " + ticket.ticket_type + "  |   CAPACITY: " + ticket.capacity + "  |  PRICE:AED " + ticket.price }}</option>
+    </select>
   </div>
- 
-</div>
 
-     </div>
 
       <div class="form-group">
         <input type="text" class="form-control" placeholder="Name" v-model="register.name">
@@ -78,7 +68,12 @@ export default {
     fetchEvents(page_url) {
       let vm = this;
       page_url = page_url || '/api/events';
-      fetch(page_url)
+      fetch(page_url,{
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': localStorage.getItem("token") 
+          }
+      })
         .then(res => res.json())
         .then(res => {
           this.events = res.data;
@@ -89,11 +84,12 @@ export default {
 
       console.log(this.register)
 
-        fetch('api/registration', {
+        fetch('api/register', {
           method: 'post',
           body: JSON.stringify(this.register),
           headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
+            'Authorization': localStorage.getItem("token") 
           }
         })
           .then(res => res.json())
@@ -120,7 +116,8 @@ export default {
       fetch('/api/event/'+this.register.event_id+'/tickets', {
           method: 'get',
           headers: {
-            'content-type': 'application/json'
+            'content-type': 'application/json',
+             'Authorization': localStorage.getItem("token") 
           }
         })
           .then(res => res.json())
