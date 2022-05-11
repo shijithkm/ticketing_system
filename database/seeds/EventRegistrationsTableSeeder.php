@@ -11,6 +11,6 @@ class EventRegistrationsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\EventRegistration::class, 30)->create();
+        factory(App\EventRegistration::class, 10)->create();
     }
 }

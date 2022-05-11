@@ -17,9 +17,11 @@ class CreateEventRegistrationsTable extends Migration
             $table->increments('id');
             $table->integer('ticket_id');
             $table->string('name');
-            $table->string('email')->unique();
+            $table->string('email');
             $table->text('mobile');
             $table->timestamps();
+            $table->unique(['email','mobile','ticket_id']);
+            
         });
 
     }
