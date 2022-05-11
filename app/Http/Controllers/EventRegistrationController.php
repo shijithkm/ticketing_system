@@ -48,11 +48,10 @@ class EventRegistrationController extends Controller
         $eventRegistration->name = $request->input('name');
         $eventRegistration->email = $request->input('email');
         $eventRegistration->mobile = $request->input('mobile');
-        $eventRegistration = $eventRegistration->save();
+        $res = $eventRegistration->save();
       
         if($res) {
-
-            return new EventRegistration($eventRegistration);   
+            return new EventRegistrationResource($eventRegistration);   
         }
         
     }

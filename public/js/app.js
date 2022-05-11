@@ -46126,7 +46126,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
       fetch('api/registration', {
         method: 'post',
-        body: JSON.stringify(this.event),
+        body: JSON.stringify(this.register),
         headers: {
           'content-type': 'application/json'
         }
