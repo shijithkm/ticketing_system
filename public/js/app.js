@@ -50280,6 +50280,12 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 //
 //
+//
+//
+//
+//
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
@@ -50292,6 +50298,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
         id: '',
         event_id: '',
         ticket_id: '',
+        available: null,
         name: '',
         mobile: '',
         email: ''
@@ -50305,11 +50312,35 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 
 
   methods: {
-    selectTicket: function selectTicket(id) {
-      this.register.ticket_id = id;
+    selectTicket: function selectTicket(page_url) {
+      var _this = this;
+
+      page_url = '/api/event/ticket/' + this.register.ticket_id + '/capacity';
+      fetch(page_url, {
+        headers: {
+          'content-type': 'application/json',
+          'Authorization': localStorage.getItem("token")
+        }
+      }).then(function (res) {
+        return res.json();
+      }).then(function (res) {
+
+        if (res.status === 'Token is Expired') {
+          alert("Token Expired Login Again!");
+          _this.$router.push("/logout");
+        }
+
+        var data = res[0];
+        _this.register.available = data.capacity - data.sold;
+        if (_this.register.available <= 0) {
+          alert("No more ticket available under " + data.ticket_type);
+        }
+      }).catch(function (err) {
+        return console.log(err);
+      });
     },
     fetchEvents: function fetchEvents(page_url) {
-      var _this = this;
+      var _this2 = this;
 
       var vm = this;
       page_url = page_url || '/api/events/all';
@@ -50321,13 +50352,17 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).then(function (res) {
         return res.json();
       }).then(function (res) {
-        _this.events = res.data;
+        if (res.status === 'Token is Expired') {
+          alert("Token Expired Login Again!");
+          _this2.$router.push("/logout");
+        }
+        _this2.events = res.data;
       }).catch(function (err) {
         return console.log(err);
       });
     },
     registerEvent: function registerEvent() {
-      var _this2 = this;
+      var _this3 = this;
 
       console.log(this.register);
 
@@ -50341,10 +50376,14 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).then(function (res) {
         return res.json();
       }).then(function (data) {
-        _this2.clearForm();
+        if (res.status === 'Token is Expired') {
+          alert("Token Expired Login Again!");
+          _this3.$router.push("/logout");
+        }
+        _this3.clearForm();
         alert('Registration Success');
       }).catch(function (err) {
-        return console.log(err);
+        return alert("Registration Failed, make sure the data you have entered is unique.");
       });
     },
     clearForm: function clearForm() {
@@ -50358,7 +50397,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       this.register.lineups = [];
     },
     selectEvent: function selectEvent() {
-      var _this3 = this;
+      var _this4 = this;
 
       console.log(this.register);
 
@@ -50371,10 +50410,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
       }).then(function (res) {
         return res.json();
       }).then(function (data) {
-        _this3.tickets = data;
-        if (_this3.tickets.data.length <= 0) {
-          alert('No Tickets Found!');
-        }
+        _this4.tickets = data;
       }).catch(function (err) {
         return console.log(err);
       });
@@ -50489,7 +50525,7 @@ var render = function() {
                     )
                   },
                   function($event) {
-                    return _vm.selectEvent()
+                    return _vm.selectTicket()
                   }
                 ]
               }
@@ -50502,14 +50538,36 @@ var render = function() {
                       ticket.ticket_type +
                       "  |   CAPACITY: " +
                       ticket.capacity +
-                      "  |  PRICE:AED " +
-                      ticket.price
+                      "  |  PRICE: " +
+                      ticket.price +
+                      "AED"
                   )
                 )
               ])
             }),
             0
-          )
+          ),
+          _vm._v(" "),
+          _vm.register.available != null
+            ? _c(
+                "div",
+                {
+                  staticClass: "alert",
+                  class:
+                    _vm.register.available > 0
+                      ? "alert-success"
+                      : "alert-danger",
+                  attrs: { role: "alert" }
+                },
+                [
+                  _vm._v(
+                    "\n  " +
+                      _vm._s(_vm.register.available + " Tickets Available") +
+                      "\n"
+                  )
+                ]
+              )
+            : _vm._e()
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "form-group" }, [
@@ -50714,7 +50772,7 @@ var render = function() {
     _vm._v(" "),
     _c("hr"),
     _vm._v(" "),
-    _c("h4", [_vm._v("Saless Report")]),
+    _c("h4", [_vm._v("Sales Report")]),
     _vm._v(" "),
     _c("p", [_vm._v("Last 6 months")]),
     _vm._v(" "),

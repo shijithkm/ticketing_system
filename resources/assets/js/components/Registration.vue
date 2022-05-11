@@ -13,9 +13,15 @@
 
   <div class="form-group">
     <label for="exampleFormControlSelect1">Select Ticket Type</label>
-    <select class="form-control"  @change="selectEvent()" v-model="register.ticket_id">
-      <option v-for="ticket in tickets" :value="ticket.id" >{{ "TYPE: " + ticket.ticket_type + "  |   CAPACITY: " + ticket.capacity + "  |  PRICE:AED " + ticket.price }}</option>
+    <select class="form-control"  @change="selectTicket()" v-model="register.ticket_id">
+      <option v-for="ticket in tickets" :value="ticket.id" >{{ "TYPE: " + ticket.ticket_type + "  |   CAPACITY: " + ticket.capacity + "  |  PRICE: " + ticket.price + "AED" }}</option>
     </select>
+
+<div v-if="register.available != null" :class="register.available > 0 ? 'alert-success' : 'alert-danger'" class="alert" role="alert">
+  {{ register.available + ' Tickets Available'}}
+</div>
+    
+
   </div>
 
 
@@ -48,6 +54,7 @@ export default {
         id: '',
         event_id: '',
         ticket_id: '',
+        available:null,
         name: '',
         mobile: '',
         email:'',
@@ -62,8 +69,30 @@ export default {
 
   methods: {
 
-    selectTicket(id){
-      this.register.ticket_id = id;
+    selectTicket(page_url){
+      
+      page_url = '/api/event/ticket/'+this.register.ticket_id+'/capacity';
+      fetch(page_url,{
+        headers: {
+            'content-type': 'application/json',
+            'Authorization': localStorage.getItem("token") 
+          }
+      })
+        .then(res => res.json())
+        .then(res => {
+
+          if(res.status === 'Token is Expired'){
+            alert("Token Expired Login Again!")
+            this.$router.push("/logout")
+          }
+
+          const data = res[0];
+          this.register.available = data.capacity - data.sold;
+          if(this.register.available <= 0 ){
+            alert("No more ticket available under " + data.ticket_type)
+          }
+        })
+        .catch(err => console.log(err));
     },
     fetchEvents(page_url) {
       let vm = this;
@@ -76,6 +105,10 @@ export default {
       })
         .then(res => res.json())
         .then(res => {
+          if(res.status === 'Token is Expired'){
+            alert("Token Expired Login Again!")
+            this.$router.push("/logout")
+          }
           this.events = res.data;
         })
         .catch(err => console.log(err));
@@ -94,10 +127,14 @@ export default {
         })
           .then(res => res.json())
           .then(data => {
+            if(res.status === 'Token is Expired'){
+            alert("Token Expired Login Again!")
+            this.$router.push("/logout")
+          }
             this.clearForm();
             alert('Registration Success');
           })
-          .catch(err => console.log(err));
+          .catch(err =>  alert("Registration Failed, make sure the data you have entered is unique."));
       
     },
     clearForm() {

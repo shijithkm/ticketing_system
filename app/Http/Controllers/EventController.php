@@ -111,23 +111,35 @@ class EventController extends Controller
     }
 
 
+    
+    public function validateCapacity($ticket_id)
+    {
+   
+        $capacity = DB::table('events')
+        ->join('tickets', 'events.id', '=', 'tickets.event_id')
+        ->join('event_registrations', 'tickets.id', '=', 'event_registrations.ticket_id')
+        ->select('events.title', 'tickets.ticket_type', 'tickets.capacity','tickets.price', DB::raw('COUNT(event_registrations.id) as sold'))
+        ->groupBy('event_registrations.ticket_id')
+        ->where('event_registrations.ticket_id', '=', $ticket_id)
+        ->orderBy('events.title')
+        ->get();
+
+        
+        return $capacity;
+    }
+  
+
 
     public function sales()
     {
-        // Get 
-        // $sales =  DB::select("select e.title,t.ticket_type,t.capacity,t.price,count(r.email) sold from events e 
-        // JOIN tickets t ON e.id = t.event_id
-        // JOIN event_registrations r ON t.id = r.ticket_id
-        // GROUP BY r.ticket_id  
-        // ORDER BY `e`.`title` ASC")->get();
-        // return $sales;
-
+   
         $sales = DB::table('events')
         ->join('tickets', 'events.id', '=', 'tickets.event_id')
         ->join('event_registrations', 'tickets.id', '=', 'event_registrations.ticket_id')
         ->select('events.title', 'tickets.ticket_type', 'tickets.capacity','tickets.price', DB::raw('COUNT(event_registrations.id) as sold'))
         ->groupBy('event_registrations.ticket_id')
         ->where('event_registrations.created_at', '>=', now()->subMonths(6))
+        ->orderBy('events.title')
         ->get();
 
         

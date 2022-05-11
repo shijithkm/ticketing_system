@@ -4,7 +4,7 @@
 
     <hr />
 
-    <h4>Saless Report</h4>
+    <h4>Sales Report</h4>
     <p>Last 6 months</p>
 
     <table class="table table-sm">

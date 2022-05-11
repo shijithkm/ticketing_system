@@ -26,6 +26,8 @@ Route::group(['middleware'=>'jwt.verify'],function(){
     // List single event
     Route::get('event/{id}', 'EventController@show');
 
+    Route::get('event/ticket/{id}/capacity', 'EventController@validateCapacity');
+
     // List Tikets Based On Event id
     Route::get('event/{id}/tickets', 'EventController@tickets');
 

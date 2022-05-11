@@ -11,6 +11,6 @@ class LineupsTableSeeder extends Seeder
      */
     public function run()
     {
-        factory(App\Lineup::class, 30)->create();
+        factory(App\Lineup::class, 5)->create();
     }
 }
