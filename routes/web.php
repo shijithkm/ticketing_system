@@ -12,10 +12,10 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('app');
 });
 
 
-Route::get('/register', function () {
-    return view('registration');
+Route::get('{slug}', function () {
+    return view('app');
 });

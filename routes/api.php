@@ -51,4 +51,4 @@ Route::delete('ticket/{id}', 'TicketsController@destroy');
 Route::get('registrations', 'EventRegistrationController@index');
 
 // Event Registration
-Route::post('registration', 'EventRegistrationController@store');
+Route::post('', 'EventRegistrationController@store');
