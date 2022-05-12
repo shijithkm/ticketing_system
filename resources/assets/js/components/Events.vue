@@ -83,8 +83,8 @@
                     </div>
                     <div class="row">
                         <div class="col text-right">
-                           <button type="button"  :disabled="!event.title?true:false"  @click="clearForm()" class="btn btn-danger">CANCEL</button> 
-                           <button type="submit" :disabled="!event.title?true:false" class="btn btn-primary">CREATE</button>
+                            <button type="button" :disabled="!event.title?true:false" @click="clearForm()" class="btn btn-danger">CANCEL</button>
+                            <button type="submit" :disabled="!event.title?true:false" class="btn btn-primary">CREATE</button>
                         </div>
                     </div>
                 </form>
@@ -103,7 +103,9 @@
                     <div class="col-12 text-left">
                         <h4>{{ event.title }}</h4>
                         <p>{{ event.description }}</p>
-                        <button @click="deleteEvent(event.id)" type="button" class="btn btn-danger">Delete</button>
+                        <div class="col-12 text-right">
+                            <button @click="deleteEvent(event.id)" type="button" class="btn btn-danger">Delete</button>
+                        </div>
                     </div>
                 </div>
             </div>

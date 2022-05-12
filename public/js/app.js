@@ -49434,6 +49434,8 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
+//
+//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
     data: function data() {
@@ -50177,19 +50179,21 @@ var render = function() {
                     _vm._v(" "),
                     _c("p", [_vm._v(_vm._s(event.description))]),
                     _vm._v(" "),
-                    _c(
-                      "button",
-                      {
-                        staticClass: "btn btn-danger",
-                        attrs: { type: "button" },
-                        on: {
-                          click: function($event) {
-                            return _vm.deleteEvent(event.id)
+                    _c("div", { staticClass: "col-12 text-right" }, [
+                      _c(
+                        "button",
+                        {
+                          staticClass: "btn btn-danger",
+                          attrs: { type: "button" },
+                          on: {
+                            click: function($event) {
+                              return _vm.deleteEvent(event.id)
+                            }
                           }
-                        }
-                      },
-                      [_vm._v("Delete")]
-                    )
+                        },
+                        [_vm._v("Delete")]
+                      )
+                    ])
                   ])
                 ]
               )
@@ -50400,7 +50404,8 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             }).then(function (res) {
                 return res.json();
             }).then(function (data) {
-                if (res.status === 'Token is Expired') {
+                console.log(data);
+                if (data && data.status === 'Token is Expired') {
                     alert("Token Expired Login Again!");
                     _this3.$router.push("/logout");
                 }
@@ -50417,6 +50422,7 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
             this.register.name = '';
             this.register.email = '';
             this.register.mobile = '';
+            this.register.available = null;
             this.register.tickets = [];
             this.register.lineups = [];
         },

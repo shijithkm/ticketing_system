@@ -127,7 +127,8 @@ export default {
                 })
                 .then(res => res.json())
                 .then(data => {
-                    if (res.status === 'Token is Expired') {
+                    console.log(data);
+                    if (data && data.status === 'Token is Expired') {
                         alert("Token Expired Login Again!")
                         this.$router.push("/logout")
                     }
@@ -144,8 +145,10 @@ export default {
             this.register.name = '';
             this.register.email = '';
             this.register.mobile = '';
+            this.register.available = null;
             this.register.tickets = [];
             this.register.lineups = [];
+            
         },
         selectEvent() {
             console.log(this.register);
