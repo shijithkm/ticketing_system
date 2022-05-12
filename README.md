@@ -1,3 +1,8 @@
+# Pre Requesit 
+
+> PHP 7.3.27 
+> Node v14.6.0
+
 # Ticketing System Laravel/Vue App
 
 > Laravel 5.5 API that uses the API resources with a Vue.js frontend

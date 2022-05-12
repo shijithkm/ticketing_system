@@ -6,7 +6,7 @@
 
     <h4>Sales Report</h4>
     <p>Last 6 months</p>
-
+<div class="table-responsive">
     <table class="table table-sm">
       <thead>
         <tr>
@@ -27,6 +27,7 @@
         </tr>
       </tbody>
     </table>
+    </div>
   </div>
 </template>
 <script>

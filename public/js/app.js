@@ -49434,172 +49434,169 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
 //
 //
 //
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
-//
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      events: [],
-      event: {
-        id: '',
-        title: '',
-        description: '',
-        event_start_date: '',
-        event_end_date: '',
-        ticket_type: '',
-        capacity: '',
-        price: '',
-        topic: '',
-        speaker: '',
-        event_time: '',
-        lineups: [],
-        tickets: []
-      },
-      event_id: '',
-      pagination: {},
-      edit: false
-    };
-  },
-  created: function created() {
-    this.fetchEvents();
-  },
+    data: function data() {
+        return {
+            events: [],
+            event: {
+                id: '',
+                title: '',
+                description: '',
+                event_start_date: '',
+                event_end_date: '',
+                ticket_type: '',
+                capacity: '',
+                price: '',
+                topic: '',
+                speaker: '',
+                event_time: '',
+                lineups: [],
+                tickets: []
+            },
+            event_id: '',
+            pagination: {},
+            edit: false
+        };
+    },
+    created: function created() {
+        this.fetchEvents();
+    },
 
 
-  methods: {
-    fetchEvents: function fetchEvents(page_url) {
-      var _this = this;
+    methods: {
+        fetchEvents: function fetchEvents(page_url) {
+            var _this = this;
 
-      var vm = this;
-      page_url = page_url || '/api/events';
-      fetch(page_url, {
-        headers: {
-          'content-type': 'application/json',
-          'Authorization': localStorage.getItem("token")
+            var vm = this;
+            page_url = page_url || '/api/events';
+            fetch(page_url, {
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': localStorage.getItem("token")
+                }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (res) {
+                if (res.status === 'Token is Expired') {
+                    alert("Token Expired Login Again!");
+                    _this.$router.push("/logout");
+                }
+                _this.events = res.data;
+                vm.makePagination(res.meta, res.links);
+            }).catch(function (err) {
+                return console.log(err);
+            });
+        },
+        makePagination: function makePagination(meta, links) {
+            var pagination = {
+                current_page: meta.current_page,
+                last_page: meta.last_page,
+                next_page_url: links.next,
+                prev_page_url: links.prev
+            };
+
+            this.pagination = pagination;
+        },
+        deleteEvent: function deleteEvent(id) {
+            var _this2 = this;
+
+            if (confirm('Are You Sure?')) {
+                fetch('api/event/' + id, {
+                    method: 'delete',
+                    headers: {
+                        'content-type': 'application/json',
+                        'Authorization': localStorage.getItem("token")
+                    }
+                }).then(function (res) {
+                    return res.json();
+                }).then(function (data) {
+                    alert('Event Removed');
+                    _this2.fetchEvents();
+                }).catch(function (err) {
+                    return console.log(err);
+                });
+            }
+        },
+        addEvent: function addEvent() {
+            var _this3 = this;
+
+            fetch('api/event', {
+                method: 'post',
+                body: JSON.stringify(this.event),
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': localStorage.getItem("token")
+                }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                _this3.clearForm();
+                alert('Event Added');
+                _this3.fetchEvents();
+            }).catch(function (err) {
+                return console.log(err);
+            });
+        },
+        editEvent: function editEvent(event) {
+            this.edit = true;
+            this.event.id = event.id;
+            this.event.event_id = event.id;
+            this.event.title = event.title;
+            this.event.description = event.description;
+            this.event.event_start_date = event.event_start_date;
+            this.event.event_end_date = event.event_end_date;
+        },
+        clearForm: function clearForm() {
+            this.edit = false;
+            this.event.id = null;
+            this.event.event_id = null;
+            this.event.title = '';
+            this.event.description = '';
+            this.event.event_start_date = '';
+            this.event.event_end_date = '';
+            this.event.ticket_type = '';
+            this.event.capacity = '';
+            this.event.price = '';
+            this.event.topic = '';
+            this.event.speaker = '';
+            this.event.event_time = '';
+            this.event.tickets = [];
+            this.event.lineups = [];
+        },
+        addTicket: function addTicket() {
+            this.event.tickets = [].concat(_toConsumableArray(this.event.tickets), [{
+                'ticket_type': this.event.ticket_type,
+                'capacity': this.event.capacity,
+                'price': this.event.price
+            }]);
+        },
+        deleteTicket: function deleteTicket(index) {
+            if (confirm('Are You Sure?')) {
+                this.event.tickets = this.event.tickets.filter(function (ticket, i) {
+                    return index != i;
+                });
+            }
+        },
+        addLineup: function addLineup() {
+            if (this.event.topic && this.event.speaker && this.event.event_time) {
+                this.event.lineups = [].concat(_toConsumableArray(this.event.lineups), [{
+                    'topic': this.event.topic,
+                    'speaker': this.event.speaker,
+                    'event_time': this.event.event_time
+                }]);
+            } else {
+                alert("Please fill topic,speaker and event time before add");
+            }
+        },
+        deleteLineup: function deleteLineup(index) {
+            if (confirm('Are You Sure?')) {
+                this.event.lineups = this.event.lineups.filter(function (lineup, i) {
+                    return index != i;
+                });
+            }
         }
-      }).then(function (res) {
-        return res.json();
-      }).then(function (res) {
-        if (res.status === 'Token is Expired') {
-          alert("Token Expired Login Again!");
-          _this.$router.push("/logout");
-        }
-        _this.events = res.data;
-        vm.makePagination(res.meta, res.links);
-      }).catch(function (err) {
-        return console.log(err);
-      });
-    },
-    makePagination: function makePagination(meta, links) {
-      var pagination = {
-        current_page: meta.current_page,
-        last_page: meta.last_page,
-        next_page_url: links.next,
-        prev_page_url: links.prev
-      };
-
-      this.pagination = pagination;
-    },
-    deleteEvent: function deleteEvent(id) {
-      var _this2 = this;
-
-      if (confirm('Are You Sure?')) {
-        fetch('api/event/' + id, {
-          method: 'delete',
-          headers: {
-            'content-type': 'application/json',
-            'Authorization': localStorage.getItem("token")
-          }
-        }).then(function (res) {
-          return res.json();
-        }).then(function (data) {
-          alert('Event Removed');
-          _this2.fetchEvents();
-        }).catch(function (err) {
-          return console.log(err);
-        });
-      }
-    },
-    addEvent: function addEvent() {
-      var _this3 = this;
-
-      fetch('api/event', {
-        method: 'post',
-        body: JSON.stringify(this.event),
-        headers: {
-          'content-type': 'application/json',
-          'Authorization': localStorage.getItem("token")
-        }
-      }).then(function (res) {
-        return res.json();
-      }).then(function (data) {
-        _this3.clearForm();
-        alert('Event Added');
-        _this3.fetchEvents();
-      }).catch(function (err) {
-        return console.log(err);
-      });
-    },
-    editEvent: function editEvent(event) {
-      this.edit = true;
-      this.event.id = event.id;
-      this.event.event_id = event.id;
-      this.event.title = event.title;
-      this.event.description = event.description;
-      this.event.event_start_date = event.event_start_date;
-      this.event.event_end_date = event.event_end_date;
-    },
-    clearForm: function clearForm() {
-      this.edit = false;
-      this.event.id = null;
-      this.event.event_id = null;
-      this.event.title = '';
-      this.event.description = '';
-      this.event.event_start_date = '';
-      this.event.event_end_date = '';
-      this.event.ticket_type = '';
-      this.event.capacity = '';
-      this.event.price = '';
-      this.event.topic = '';
-      this.event.speaker = '';
-      this.event.event_time = '';
-      this.event.tickets = [];
-      this.event.lineups = [];
-    },
-    addTicket: function addTicket() {
-      this.event.tickets = [].concat(_toConsumableArray(this.event.tickets), [{ 'ticket_type': this.event.ticket_type, 'capacity': this.event.capacity, 'price': this.event.price }]);
-    },
-    deleteTicket: function deleteTicket(index) {
-      if (confirm('Are You Sure?')) {
-        this.event.tickets = this.event.tickets.filter(function (ticket, i) {
-          return index != i;
-        });
-      }
-    },
-    addLineup: function addLineup() {
-      if (this.event.topic && this.event.speaker && this.event.event_time) {
-        this.event.lineups = [].concat(_toConsumableArray(this.event.lineups), [{ 'topic': this.event.topic, 'speaker': this.event.speaker, 'event_time': this.event.event_time }]);
-      } else {
-        alert("Please fill topic,speaker and event time before add");
-      }
-    },
-    deleteLineup: function deleteLineup(index) {
-      if (confirm('Are You Sure?')) {
-        this.event.lineups = this.event.lineups.filter(function (lineup, i) {
-          return index != i;
-        });
-      }
     }
-  }
 });
 
 /***/ }),
@@ -49613,7 +49610,7 @@ var render = function() {
   return _c("div", [
     _c("div", { staticClass: "container" }, [
       _c("div", { staticClass: "row" }, [
-        _c("div", { staticClass: "col-8" }, [
+        _c("div", { staticClass: "col-sm-12" }, [
           _c("h3", [_vm._v("Add Event")]),
           _vm._v(" "),
           _c(
@@ -49736,338 +49733,365 @@ var render = function() {
               _vm._v(" "),
               _c("h3", [_vm._v("Lineup Details")]),
               _vm._v(" "),
-              _c("table", { staticClass: "table" }, [
-                _c("thead", [
-                  _c("tr", [
-                    _c("th", { attrs: { scope: "col" } }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.event.topic,
-                            expression: "event.topic"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", placeholder: "Topic" },
-                        domProps: { value: _vm.event.topic },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.event, "topic", $event.target.value)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("th", { attrs: { scope: "col" } }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.event.speaker,
-                            expression: "event.speaker"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "text", placeholder: "Speaker" },
-                        domProps: { value: _vm.event.speaker },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.event, "speaker", $event.target.value)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("th", { attrs: { scope: "col" } }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.event.event_time,
-                            expression: "event.event_time"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: {
-                          type: "datetime-local",
-                          placeholder: "Event Time"
-                        },
-                        domProps: { value: _vm.event.event_time },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(
-                              _vm.event,
-                              "event_time",
-                              $event.target.value
-                            )
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("th", { attrs: { scope: "col" } }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-light btn-block",
-                          attrs: {
-                            type: "button",
-                            disabled:
-                              !_vm.event.topic ||
-                              !_vm.event.speaker ||
-                              !_vm.event.event_time
-                                ? true
-                                : false
-                          },
-                          on: {
-                            click: function($event) {
-                              return _vm.addLineup()
-                            }
-                          }
-                        },
-                        [_vm._v("Add")]
-                      )
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "tbody",
-                  _vm._l(_vm.event.lineups, function(lineup) {
-                    return _c("tr", { key: lineup.id }, [
-                      _c("td", [_vm._v(_vm._s(lineup.topic))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(lineup.speaker))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(lineup.event_time))]),
-                      _vm._v(" "),
-                      _c("td", [
-                        _c(
-                          "button",
-                          {
-                            staticClass: "btn btn-light btn-block",
-                            attrs: { type: "button" },
-                            on: {
-                              click: function($event) {
-                                return _vm.deleteLineup(_vm.index)
-                              }
-                            }
-                          },
-                          [_vm._v("Delete")]
-                        )
-                      ])
-                    ])
-                  }),
-                  0
-                )
-              ]),
-              _vm._v(" "),
-              _c("h3", [_vm._v("Ticket Details")]),
-              _vm._v(" "),
-              _c("table", { staticClass: "table" }, [
-                _c("thead", [
-                  _c("tr", [
-                    _c("th", { attrs: { scope: "col" } }, [
-                      _c(
-                        "label",
-                        { attrs: { for: "exampleFormControlSelect1" } },
-                        [_vm._v("Ticket Type")]
-                      ),
-                      _vm._v(" "),
-                      _c(
-                        "select",
-                        {
+              _c("div", { staticClass: "table-responsive" }, [
+                _c("table", { staticClass: "table" }, [
+                  _c("thead", [
+                    _c("tr", [
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c("input", {
                           directives: [
                             {
                               name: "model",
                               rawName: "v-model",
-                              value: _vm.event.ticket_type,
-                              expression: "event.ticket_type"
+                              value: _vm.event.topic,
+                              expression: "event.topic"
                             }
                           ],
                           staticClass: "form-control",
+                          staticStyle: { "min-width": "200px" },
+                          attrs: { type: "text", placeholder: "Topic" },
+                          domProps: { value: _vm.event.topic },
                           on: {
-                            change: function($event) {
-                              var $$selectedVal = Array.prototype.filter
-                                .call($event.target.options, function(o) {
-                                  return o.selected
-                                })
-                                .map(function(o) {
-                                  var val = "_value" in o ? o._value : o.value
-                                  return val
-                                })
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.event, "topic", $event.target.value)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.event.speaker,
+                              expression: "event.speaker"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          staticStyle: { "min-width": "200px" },
+                          attrs: { type: "text", placeholder: "Speaker" },
+                          domProps: { value: _vm.event.speaker },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
                               _vm.$set(
                                 _vm.event,
-                                "ticket_type",
-                                $event.target.multiple
-                                  ? $$selectedVal
-                                  : $$selectedVal[0]
+                                "speaker",
+                                $event.target.value
                               )
                             }
                           }
-                        },
-                        [
-                          _c("option", { attrs: { value: "GOLD" } }, [
-                            _vm._v("GOLD")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "SILVER" } }, [
-                            _vm._v("SILVER")
-                          ]),
-                          _vm._v(" "),
-                          _c("option", { attrs: { value: "PLATTINUM" } }, [
-                            _vm._v("PLATINUM")
-                          ])
-                        ]
-                      )
-                    ]),
-                    _vm._v(" "),
-                    _c("th", { attrs: { scope: "col" } }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.event.capacity,
-                            expression: "event.capacity"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "number", placeholder: "Capacity" },
-                        domProps: { value: _vm.event.capacity },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.event.event_time,
+                              expression: "event.event_time"
                             }
-                            _vm.$set(_vm.event, "capacity", $event.target.value)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("th", { attrs: { scope: "col" } }, [
-                      _c("input", {
-                        directives: [
-                          {
-                            name: "model",
-                            rawName: "v-model",
-                            value: _vm.event.price,
-                            expression: "event.price"
-                          }
-                        ],
-                        staticClass: "form-control",
-                        attrs: { type: "number", placeholder: "Price" },
-                        domProps: { value: _vm.event.price },
-                        on: {
-                          input: function($event) {
-                            if ($event.target.composing) {
-                              return
-                            }
-                            _vm.$set(_vm.event, "price", $event.target.value)
-                          }
-                        }
-                      })
-                    ]),
-                    _vm._v(" "),
-                    _c("th", { attrs: { scope: "col" } }, [
-                      _c(
-                        "button",
-                        {
-                          staticClass: "btn btn-light btn-block",
+                          ],
+                          staticClass: "form-control",
                           attrs: {
-                            type: "button",
-                            disabled:
-                              !_vm.event.ticket_type ||
-                              !_vm.event.capacity ||
-                              !_vm.event.price
-                                ? true
-                                : false
+                            type: "datetime-local",
+                            placeholder: "Event Time"
                           },
+                          domProps: { value: _vm.event.event_time },
                           on: {
-                            click: function($event) {
-                              return _vm.addTicket()
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.event,
+                                "event_time",
+                                $event.target.value
+                              )
                             }
                           }
-                        },
-                        [_vm._v("Add")]
-                      )
-                    ])
-                  ])
-                ]),
-                _vm._v(" "),
-                _c(
-                  "tbody",
-                  _vm._l(_vm.event.tickets, function(ticket, index) {
-                    return _c("tr", { key: ticket.id }, [
-                      _c("td", [_vm._v(_vm._s(ticket.ticket_type))]),
+                        })
+                      ]),
                       _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(ticket.capacity))]),
-                      _vm._v(" "),
-                      _c("td", [_vm._v(_vm._s(ticket.price))]),
-                      _vm._v(" "),
-                      _c("td", [
+                      _c("th", { attrs: { scope: "col" } }, [
                         _c(
                           "button",
                           {
-                            key: ticket.id,
                             staticClass: "btn btn-light btn-block",
-                            attrs: { type: "button" },
+                            attrs: {
+                              type: "button",
+                              disabled:
+                                !_vm.event.topic ||
+                                !_vm.event.speaker ||
+                                !_vm.event.event_time
+                                  ? true
+                                  : false
+                            },
                             on: {
                               click: function($event) {
-                                return _vm.deleteTicket(index)
+                                return _vm.addLineup()
                               }
                             }
                           },
-                          [_vm._v("Delete")]
+                          [_vm._v("Add")]
                         )
                       ])
                     ])
-                  }),
-                  0
-                )
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.event.lineups, function(lineup) {
+                      return _c("tr", { key: lineup.id }, [
+                        _c("td", [_vm._v(_vm._s(lineup.topic))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(lineup.speaker))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(lineup.event_time))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              staticClass: "btn btn-light btn-block",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteLineup(_vm.index)
+                                }
+                              }
+                            },
+                            [_vm._v("Delete")]
+                          )
+                        ])
+                      ])
+                    }),
+                    0
+                  )
+                ])
               ]),
               _vm._v(" "),
-              _c(
-                "button",
-                {
-                  staticClass: "btn btn-light btn-block",
-                  attrs: {
-                    type: "submit",
-                    disabled: !_vm.event.title ? true : false
-                  }
-                },
-                [_vm._v("Create Event")]
-              )
+              _c("h3", [_vm._v("Ticket Details")]),
+              _vm._v(" "),
+              _c("div", { staticClass: "table-responsive" }, [
+                _c("table", { staticClass: "table" }, [
+                  _c("thead", [
+                    _c("tr", [
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "label",
+                          { attrs: { for: "exampleFormControlSelect1" } },
+                          [_vm._v("Ticket Type")]
+                        ),
+                        _vm._v(" "),
+                        _c(
+                          "select",
+                          {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: _vm.event.ticket_type,
+                                expression: "event.ticket_type"
+                              }
+                            ],
+                            staticClass: "form-control",
+                            staticStyle: { "min-width": "200px" },
+                            on: {
+                              change: function($event) {
+                                var $$selectedVal = Array.prototype.filter
+                                  .call($event.target.options, function(o) {
+                                    return o.selected
+                                  })
+                                  .map(function(o) {
+                                    var val = "_value" in o ? o._value : o.value
+                                    return val
+                                  })
+                                _vm.$set(
+                                  _vm.event,
+                                  "ticket_type",
+                                  $event.target.multiple
+                                    ? $$selectedVal
+                                    : $$selectedVal[0]
+                                )
+                              }
+                            }
+                          },
+                          [
+                            _c("option", { attrs: { value: "GOLD" } }, [
+                              _vm._v("GOLD")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "SILVER" } }, [
+                              _vm._v("SILVER")
+                            ]),
+                            _vm._v(" "),
+                            _c("option", { attrs: { value: "PLATTINUM" } }, [
+                              _vm._v("PLATINUM")
+                            ])
+                          ]
+                        )
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.event.capacity,
+                              expression: "event.capacity"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          staticStyle: { "min-width": "200px" },
+                          attrs: { type: "number", placeholder: "Capacity" },
+                          domProps: { value: _vm.event.capacity },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(
+                                _vm.event,
+                                "capacity",
+                                $event.target.value
+                              )
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c("input", {
+                          directives: [
+                            {
+                              name: "model",
+                              rawName: "v-model",
+                              value: _vm.event.price,
+                              expression: "event.price"
+                            }
+                          ],
+                          staticClass: "form-control",
+                          staticStyle: { "min-width": "200px" },
+                          attrs: { type: "number", placeholder: "Price" },
+                          domProps: { value: _vm.event.price },
+                          on: {
+                            input: function($event) {
+                              if ($event.target.composing) {
+                                return
+                              }
+                              _vm.$set(_vm.event, "price", $event.target.value)
+                            }
+                          }
+                        })
+                      ]),
+                      _vm._v(" "),
+                      _c("th", { attrs: { scope: "col" } }, [
+                        _c(
+                          "button",
+                          {
+                            staticClass: "btn btn-light btn-block",
+                            attrs: {
+                              type: "button",
+                              disabled:
+                                !_vm.event.ticket_type ||
+                                !_vm.event.capacity ||
+                                !_vm.event.price
+                                  ? true
+                                  : false
+                            },
+                            on: {
+                              click: function($event) {
+                                return _vm.addTicket()
+                              }
+                            }
+                          },
+                          [_vm._v("Add")]
+                        )
+                      ])
+                    ])
+                  ]),
+                  _vm._v(" "),
+                  _c(
+                    "tbody",
+                    _vm._l(_vm.event.tickets, function(ticket, index) {
+                      return _c("tr", { key: ticket.id }, [
+                        _c("td", [_vm._v(_vm._s(ticket.ticket_type))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(ticket.capacity))]),
+                        _vm._v(" "),
+                        _c("td", [_vm._v(_vm._s(ticket.price))]),
+                        _vm._v(" "),
+                        _c("td", [
+                          _c(
+                            "button",
+                            {
+                              key: ticket.id,
+                              staticClass: "btn btn-light btn-block",
+                              attrs: { type: "button" },
+                              on: {
+                                click: function($event) {
+                                  return _vm.deleteTicket(index)
+                                }
+                              }
+                            },
+                            [_vm._v("Delete")]
+                          )
+                        ])
+                      ])
+                    }),
+                    0
+                  )
+                ])
+              ]),
+              _vm._v(" "),
+              _c("div", { staticClass: "row" }, [
+                _c("div", { staticClass: "col text-right" }, [
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-danger",
+                      attrs: {
+                        type: "button",
+                        disabled: !_vm.event.title ? true : false
+                      },
+                      on: {
+                        click: function($event) {
+                          return _vm.clearForm()
+                        }
+                      }
+                    },
+                    [_vm._v("CANCEL")]
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "button",
+                    {
+                      staticClass: "btn btn-primary",
+                      attrs: {
+                        type: "submit",
+                        disabled: !_vm.event.title ? true : false
+                      }
+                    },
+                    [_vm._v("CREATE")]
+                  )
+                ])
+              ])
             ]
-          ),
-          _vm._v(" "),
-          _c(
-            "button",
-            {
-              staticClass: "btn btn-danger btn-block",
-              on: {
-                click: function($event) {
-                  return _vm.clearForm()
-                }
-              }
-            },
-            [_vm._v("Cancel")]
           )
         ]),
+        _vm._v(" "),
+        _c("br"),
         _vm._v(" "),
         _c(
           "div",
@@ -50288,134 +50312,134 @@ Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
 //
 
 /* harmony default export */ __webpack_exports__["default"] = ({
-  data: function data() {
-    return {
-      events: [],
-      lineups: [],
-      tickets: [],
-      selectedEvent: null,
-      register: {
-        id: '',
-        event_id: '',
-        ticket_id: '',
-        available: null,
-        name: '',
-        mobile: '',
-        email: ''
-      }
+    data: function data() {
+        return {
+            events: [],
+            lineups: [],
+            tickets: [],
+            selectedEvent: null,
+            register: {
+                id: '',
+                event_id: '',
+                ticket_id: '',
+                available: null,
+                name: '',
+                mobile: '',
+                email: ''
+            }
 
-    };
-  },
-  created: function created() {
-    this.fetchEvents();
-  },
-
-
-  methods: {
-    selectTicket: function selectTicket(page_url) {
-      var _this = this;
-
-      page_url = '/api/event/ticket/' + this.register.ticket_id + '/capacity';
-      fetch(page_url, {
-        headers: {
-          'content-type': 'application/json',
-          'Authorization': localStorage.getItem("token")
-        }
-      }).then(function (res) {
-        return res.json();
-      }).then(function (res) {
-
-        if (res.status === 'Token is Expired') {
-          alert("Token Expired Login Again!");
-          _this.$router.push("/logout");
-        }
-
-        var data = res[0];
-        _this.register.available = data.capacity - data.sold;
-        if (_this.register.available <= 0) {
-          alert("No more ticket available under " + data.ticket_type);
-        }
-      }).catch(function (err) {
-        return console.log(err);
-      });
+        };
     },
-    fetchEvents: function fetchEvents(page_url) {
-      var _this2 = this;
-
-      var vm = this;
-      page_url = page_url || '/api/events/all';
-      fetch(page_url, {
-        headers: {
-          'content-type': 'application/json',
-          'Authorization': localStorage.getItem("token")
-        }
-      }).then(function (res) {
-        return res.json();
-      }).then(function (res) {
-        if (res.status === 'Token is Expired') {
-          alert("Token Expired Login Again!");
-          _this2.$router.push("/logout");
-        }
-        _this2.events = res.data;
-      }).catch(function (err) {
-        return console.log(err);
-      });
+    created: function created() {
+        this.fetchEvents();
     },
-    registerEvent: function registerEvent() {
-      var _this3 = this;
 
-      console.log(this.register);
 
-      fetch('api/register', {
-        method: 'post',
-        body: JSON.stringify(this.register),
-        headers: {
-          'content-type': 'application/json',
-          'Authorization': localStorage.getItem("token")
+    methods: {
+        selectTicket: function selectTicket(page_url) {
+            var _this = this;
+
+            page_url = '/api/event/ticket/' + this.register.ticket_id + '/capacity';
+            fetch(page_url, {
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': localStorage.getItem("token")
+                }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (res) {
+
+                if (res.status === 'Token is Expired') {
+                    alert("Token Expired Login Again!");
+                    _this.$router.push("/logout");
+                }
+
+                var data = res[0];
+                _this.register.available = data.capacity - data.sold;
+                if (_this.register.available <= 0) {
+                    alert("No more ticket available under " + data.ticket_type);
+                }
+            }).catch(function (err) {
+                return console.log(err);
+            });
+        },
+        fetchEvents: function fetchEvents(page_url) {
+            var _this2 = this;
+
+            var vm = this;
+            page_url = page_url || '/api/events/all';
+            fetch(page_url, {
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': localStorage.getItem("token")
+                }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (res) {
+                if (res.status === 'Token is Expired') {
+                    alert("Token Expired Login Again!");
+                    _this2.$router.push("/logout");
+                }
+                _this2.events = res.data;
+            }).catch(function (err) {
+                return console.log(err);
+            });
+        },
+        registerEvent: function registerEvent() {
+            var _this3 = this;
+
+            console.log(this.register);
+
+            fetch('api/register', {
+                method: 'post',
+                body: JSON.stringify(this.register),
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': localStorage.getItem("token")
+                }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                if (res.status === 'Token is Expired') {
+                    alert("Token Expired Login Again!");
+                    _this3.$router.push("/logout");
+                }
+                _this3.clearForm();
+                alert('Registration Success');
+            }).catch(function (err) {
+                return alert("Registration Failed, make sure the data you have entered is unique.");
+            });
+        },
+        clearForm: function clearForm() {
+            this.register.id = null;
+            this.register.event_id = null;
+            this.register.ticket_id = null;
+            this.register.name = '';
+            this.register.email = '';
+            this.register.mobile = '';
+            this.register.tickets = [];
+            this.register.lineups = [];
+        },
+        selectEvent: function selectEvent() {
+            var _this4 = this;
+
+            console.log(this.register);
+
+            fetch('/api/event/' + this.register.event_id + '/tickets', {
+                method: 'get',
+                headers: {
+                    'content-type': 'application/json',
+                    'Authorization': localStorage.getItem("token")
+                }
+            }).then(function (res) {
+                return res.json();
+            }).then(function (data) {
+                _this4.tickets = data;
+            }).catch(function (err) {
+                return console.log(err);
+            });
         }
-      }).then(function (res) {
-        return res.json();
-      }).then(function (data) {
-        if (res.status === 'Token is Expired') {
-          alert("Token Expired Login Again!");
-          _this3.$router.push("/logout");
-        }
-        _this3.clearForm();
-        alert('Registration Success');
-      }).catch(function (err) {
-        return alert("Registration Failed, make sure the data you have entered is unique.");
-      });
-    },
-    clearForm: function clearForm() {
-      this.register.id = null;
-      this.register.event_id = null;
-      this.register.ticket_id = null;
-      this.register.name = '';
-      this.register.email = '';
-      this.register.mobile = '';
-      this.register.tickets = [];
-      this.register.lineups = [];
-    },
-    selectEvent: function selectEvent() {
-      var _this4 = this;
-
-      console.log(this.register);
-
-      fetch('/api/event/' + this.register.event_id + '/tickets', {
-        method: 'get',
-        headers: {
-          'content-type': 'application/json',
-          'Authorization': localStorage.getItem("token")
-        }
-      }).then(function (res) {
-        return res.json();
-      }).then(function (data) {
-        _this4.tickets = data;
-      }).catch(function (err) {
-        return console.log(err);
-      });
     }
-  }
 });
 
 /***/ }),
@@ -50561,9 +50585,9 @@ var render = function() {
                 },
                 [
                   _vm._v(
-                    "\n  " +
+                    "\n                " +
                       _vm._s(_vm.register.available + " Tickets Available") +
-                      "\n"
+                      "\n            "
                   )
                 ]
               )
@@ -50642,38 +50666,43 @@ var render = function() {
           })
         ]),
         _vm._v(" "),
-        _c(
-          "button",
-          {
-            staticClass: "btn btn-light btn-block",
-            attrs: {
-              type: "submit",
-              disabled:
-                !_vm.register.name ||
-                !_vm.register.email ||
-                !_vm.register.mobile ||
-                !_vm.register.ticket_id ||
-                !_vm.register.event_id
-                  ? true
-                  : false
-            }
-          },
-          [_vm._v("Save")]
-        )
+        _c("div", { staticClass: "row" }, [
+          _c("div", { staticClass: "col text-right" }, [
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-danger",
+                attrs: { type: "button" },
+                on: {
+                  click: function($event) {
+                    return _vm.clearForm()
+                  }
+                }
+              },
+              [_vm._v("CANCEL")]
+            ),
+            _vm._v(" "),
+            _c(
+              "button",
+              {
+                staticClass: "btn btn-primary",
+                attrs: {
+                  type: "submit",
+                  disabled:
+                    !_vm.register.name ||
+                    !_vm.register.email ||
+                    !_vm.register.mobile ||
+                    !_vm.register.ticket_id ||
+                    !_vm.register.event_id
+                      ? true
+                      : false
+                }
+              },
+              [_vm._v("REGISTER")]
+            )
+          ])
+        ])
       ]
-    ),
-    _vm._v(" "),
-    _c(
-      "button",
-      {
-        staticClass: "btn btn-danger btn-block",
-        on: {
-          click: function($event) {
-            return _vm.clearForm()
-          }
-        }
-      },
-      [_vm._v("Cancel")]
     )
   ])
 }
@@ -50693,6 +50722,7 @@ if (false) {
 
 "use strict";
 Object.defineProperty(__webpack_exports__, "__esModule", { value: true });
+//
 //
 //
 //
@@ -50776,32 +50806,34 @@ var render = function() {
     _vm._v(" "),
     _c("p", [_vm._v("Last 6 months")]),
     _vm._v(" "),
-    _c("table", { staticClass: "table table-sm" }, [
-      _vm._m(0),
-      _vm._v(" "),
-      _c(
-        "tbody",
-        _vm._l(_vm.sales, function(sale) {
-          return _c("tr", [
-            _c("td", [_vm._v(_vm._s(sale.title))]),
-            _vm._v(" "),
-            _c("td", [_vm._v(_vm._s(sale.ticket_type))]),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-right" }, [
-              _vm._v(_vm._s(sale.price))
-            ]),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-right" }, [
-              _vm._v(_vm._s(sale.sold))
-            ]),
-            _vm._v(" "),
-            _c("td", { staticClass: "text-right" }, [
-              _vm._v(_vm._s(sale.capacity - sale.sold))
+    _c("div", { staticClass: "table-responsive" }, [
+      _c("table", { staticClass: "table table-sm" }, [
+        _vm._m(0),
+        _vm._v(" "),
+        _c(
+          "tbody",
+          _vm._l(_vm.sales, function(sale) {
+            return _c("tr", [
+              _c("td", [_vm._v(_vm._s(sale.title))]),
+              _vm._v(" "),
+              _c("td", [_vm._v(_vm._s(sale.ticket_type))]),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-right" }, [
+                _vm._v(_vm._s(sale.price))
+              ]),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-right" }, [
+                _vm._v(_vm._s(sale.sold))
+              ]),
+              _vm._v(" "),
+              _c("td", { staticClass: "text-right" }, [
+                _vm._v(_vm._s(sale.capacity - sale.sold))
+              ])
             ])
-          ])
-        }),
-        0
-      )
+          }),
+          0
+        )
+      ])
     ])
   ])
 }
@@ -51474,7 +51506,7 @@ var staticRenderFns = [
       _c("div", { staticClass: "col-6 text-right" }, [
         _c("input", {
           staticClass: "btn btn-primary pr-5 pl-5",
-          attrs: { type: "submit", value: " Login " }
+          attrs: { type: "submit", value: " LOGIN " }
         })
       ])
     ])

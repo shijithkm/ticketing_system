@@ -37,7 +37,7 @@
                   <input
                     type="submit"
                     class="btn btn-primary pr-5 pl-5"
-                    value=" Login "
+                    value=" LOGIN "
                   />
                 </div>
               </div>
@@ -75,7 +75,6 @@ export default {
   },
 };
 </script>
-
 <style>
 .form-holder {
   margin-top: 20%;
