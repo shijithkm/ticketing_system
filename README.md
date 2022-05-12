@@ -49,6 +49,9 @@ npm run dev
 npm run watch
 ```
 
+# Open Browser and enter http://127.0.0.1:8000/
+# Login with email as admin@gmail.com and password as admin@123 
+
 ## Endpoints
 
 ### List all events
