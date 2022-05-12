@@ -11,6 +11,8 @@ use App\Http\Resources\Ticket as TicketResource;
 use App\Lineup;
 use App\Http\Resources\Lineup as LineupResource;
 use DB;
+use Exception;
+use Illuminate\Support\Facades\Validator;
 
 class EventController extends Controller
 {
@@ -23,18 +25,14 @@ class EventController extends Controller
     {
         // Get events
         $events = Event::orderBy('created_at', 'desc')->paginate(5);
-
-        // Return collection of events as a resource
-        return EventResource::collection($events);
+        return response()->json($events);
     }
 
     public function allevents()
     {
         // Get events
         $events = Event::orderBy('title', 'asc')->get();
-
-        // Return collection of events as a resource
-        return EventResource::collection($events);
+        return response()->json($events);
     }
 
     /**
@@ -45,8 +43,20 @@ class EventController extends Controller
      */
     public function store(Request $request)
     {
-        $event = $request->isMethod('put') ? Event::findOrFail($request->event_id) : new Event;
 
+        $validator = Validator::make($request->all(), [
+            'title' => 'required',
+            'tickets' => 'required',
+            'lineups' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json($validator->errors(), 422);
+        }
+
+        try {
+
+        $event = new Event;
         $event->id = $request->input('event_id');
         $event->title = $request->input('title');
         $event->description = $request->input('description');
@@ -78,7 +88,14 @@ class EventController extends Controller
 
         }
 
-        return new EventResource($event);
+        return response()->json($event);
+
+    }
+    catch(\Exception $e){
+        return response()->json(['status'=> false, 'message' => $this->getError($e), 500 ]);
+    }
+
+     
         
     }
 
@@ -94,7 +111,7 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
 
         // Return single event as a resource
-        return new EventResource($event);
+        return response()->json($event);
     }
 
       /**
@@ -105,9 +122,10 @@ class EventController extends Controller
      */
     public function tickets($id)
     {
+    
         // Get Tickets
         $tickets = Event::find($id)->tickets;
-        return $tickets;
+        return response()->json($tickets);
     }
 
 
@@ -125,7 +143,7 @@ class EventController extends Controller
         ->get();
 
         
-        return $capacity;
+        return response()->json($capacity);
     }
   
 
@@ -143,7 +161,7 @@ class EventController extends Controller
         ->get();
 
         
-        return $sales;
+        return response()->json($sales);
     }
   
 
@@ -159,7 +177,7 @@ class EventController extends Controller
         $event = Event::findOrFail($id);
 
         if($event->delete()) {
-            return new EventResource($event);
+            return response()->json($event);
         }    
     }
 }
