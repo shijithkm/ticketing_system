@@ -92,7 +92,7 @@ class EventController extends Controller
 
     }
     catch(\Exception $e){
-        return response()->json(['status'=> false, 'message' => $this->getError($e), 500 ]);
+        return response()->json(['status'=> false, 'message' => "Internal Server Error" ],500);
     }
 
      
@@ -143,7 +143,7 @@ class EventController extends Controller
         ->get();
 
         
-        return response()->json($capacity);
+        return response()->json($capacity[0]);
     }
   
 

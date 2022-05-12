@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Http\Requests;
 use App\EventRegistration;
 use App\Http\Resources\EventRegistration as EventRegistrationResource;
+use Exception;
+use Illuminate\Support\Facades\Validator;
 
 
 class EventRegistrationController extends Controller
@@ -20,20 +22,9 @@ class EventRegistrationController extends Controller
     {
           // Get events
           $eventRegistrations = EventRegistration::orderBy('created_at', 'desc')->paginate(5);
-
-          // Return collection of events as a resource
-          return EventRegistrationResource::collection($eventRegistrations);
+          return response()->json($eventRegistrations);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
 
     /**
      * Store a newly created resource in storage.
@@ -43,6 +34,20 @@ class EventRegistrationController extends Controller
      */
     public function store(Request $request)
     {
+
+        $validator = Validator::make($request->all(), [
+            'ticket_id' => 'required',
+            'name' => 'required',
+            'email' => 'required|email',
+            'mobile' => 'required',
+        ]);
+
+        if ($validator->fails()) {
+            return response()->json(['status'=> false, 'message' => $validator->errors()],422);
+        }
+
+        try{
+
         $eventRegistration = new EventRegistration;
         $eventRegistration->ticket_id = $request->input('ticket_id');
         $eventRegistration->name = $request->input('name');
@@ -50,54 +55,13 @@ class EventRegistrationController extends Controller
         $eventRegistration->mobile = $request->input('mobile');
         $res = $eventRegistration->save();
       
-        if($res) {
-            return new EventRegistrationResource($eventRegistration);   
-        }
+        return response()->json($eventRegistration);
+
+    }
+    catch(\Exception $e){
+        return response()->json(['status'=> false, 'message' => "Internal Server Error" ],500);
+    }
         
     }
 
-    /**
-     * Display the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function show($id)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  int  $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
-    }
 }

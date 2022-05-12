@@ -78,19 +78,17 @@ export default {
                         'Authorization': localStorage.getItem("token")
                     }
                 })
-                .then(res => res.json())
-                .then(res => {
-
-                    if (res.status === 'Token is Expired') {
-                        alert("Token Expired Login Again!")
-                        this.$router.push("/logout")
+                .then(async res => {
+                    if(res.status === 200)    {
+                        const data = await res.json();
+                        this.register.available = data.capacity - data.sold;
+                        if (this.register.available <= 0) {
+                            alert("No more ticket available under " + data.ticket_type)
+                        }
+                    }else {
+                        alert(res.statusText)
                     }
-
-                    const data = res[0];
-                    this.register.available = data.capacity - data.sold;
-                    if (this.register.available <= 0) {
-                        alert("No more ticket available under " + data.ticket_type)
-                    }
+                   
                 })
                 .catch(err => console.log(err));
         },
@@ -103,19 +101,17 @@ export default {
                         'Authorization': localStorage.getItem("token")
                     }
                 })
-                .then(res => res.json())
-                .then(res => {
-                    if (res.status === 'Token is Expired') {
-                        alert("Token Expired Login Again!")
-                        this.$router.push("/logout")
+                .then(async res => {
+                    if(res.status === 200)    {
+                        this.events = await res.json();
+                    }else {
+                        alert(res.statusText)
                     }
-                    this.events = res.data;
+                    
                 })
-                .catch(err => console.log(err));
+                 .catch(err => alert("Internal Server Error"));
         },
         registerEvent() {
-
-            console.log(this.register)
 
             fetch('api/register', {
                     method: 'post',
@@ -125,17 +121,17 @@ export default {
                         'Authorization': localStorage.getItem("token")
                     }
                 })
-                .then(res => res.json())
-                .then(data => {
-                    console.log(data);
-                    if (data && data.status === 'Token is Expired') {
-                        alert("Token Expired Login Again!")
-                        this.$router.push("/logout")
+                .then(res => {
+
+                    if(res.status === 200)    {
+                        alert('Registration Success');
+                        this.clearForm();
+                    }else {
+                        alert(res.statusText)
                     }
-                    this.clearForm();
-                    alert('Registration Success');
+                   
                 })
-                .catch(err => alert("Registration Failed, make sure the data you have entered is unique."));
+                .catch(err => alert("Internal Server Error"));
 
         },
         clearForm() {
