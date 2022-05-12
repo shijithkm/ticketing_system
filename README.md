@@ -10,6 +10,9 @@
 > Composer version 2.3.5
 ## Quick Start
 
+# Setup .env
+Rename .env.example with .env
+
 # Setup Database
 Create database with name as "ticketing_system"
 Create db user and password with all previlages 
