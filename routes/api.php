@@ -18,7 +18,7 @@ Route::post('login','AuthController@login');
 Route::group(['middleware'=>'jwt.verify'],function(){
     
     Route::get('user','AuthController@getUser');
-    // List events
+    // List events paginated
     Route::get('events', 'EventController@index');
     
     Route::get('events/all', 'EventController@allevents');

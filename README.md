@@ -1,13 +1,19 @@
-# Pre Requesit 
-
-> PHP 7.3.27 
-> Node v14.6.0
-
 # Ticketing System Laravel/Vue App
 
 > Laravel 5.5 API that uses the API resources with a Vue.js frontend
 
+# Pre Requesit 
+
+> PHP 7.3.27 
+> Node v14.6.0
+> mysql  Ver 15.1
+> Composer version 2.3.5
 ## Quick Start
+
+# Setup Database
+Create database with name as "ticketing_system"
+Create db user and password with all previlages 
+Update DB_USERNAME and DB_PASSWORD in .env 
 
 ``` bash
 # Install Dependencies
@@ -33,19 +39,18 @@ php artisan key:generate
 # Install JS Dependencies
 npm install
 
+# Start Application
+npm run dev
+
 # Watch Files
 npm run watch
 ```
 
 ## Endpoints
 
-### List all events with links and meta
+### List all events
 ``` bash
-GET api/events
-```
-### Get single event
-``` bash
-GET api/event/{id}
+GET api/events/all
 ```
 
 ### Delete event
@@ -56,20 +61,21 @@ DELETE api/event/{id}
 ### Add event
 ``` bash
 POST api/event
-title/body
+title/description/event_start_date/event_end_date/ticket_details/lineup_details
 ```
 
-### Update event
+### Register event
 ``` bash
-PUT api/event
-event_id/title/body
+POST api/register
+name/email/mobile/ticket
 ```
 
-
+### Sales Report
+``` bash
+GET event/sales
 ```
-
 ## App Info
-
+Ticketing system dashboard for an online event management company
 ### Author
 
 Shijith Mohanan
